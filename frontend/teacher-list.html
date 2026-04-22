@@ -1,1 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teachers List | Exam Room Allocation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand-mark">EA</div>
+        <div class="brand">
+          <p>Exam Room Allocation</p>
+          <h2>Admin <span>Dashboard</span></h2>
+        </div>
+        <p class="sidebar-copy">
+          Use the teacher module to track invigilators, departments, rooms, and
+          exam duty timing.
+        </p>
 
+        <nav class="nav-links">
+          <a href="index.html">
+            Dashboard
+            <small>Overview and quick access</small>
+          </a>
+          <a href="students.html">
+            Student List
+            <small>Registered students and room details</small>
+          </a>
+          <a class="active" href="teacher-list.html">
+            Teachers List
+            <small>Faculty and invigilation assignment</small>
+          </a>
+          <a href="classrooms.html">
+            Classrooms
+            <small>Rooms with capacity and status</small>
+          </a>
+          <a href="seating-plan.html">
+            Generate Seating Plan
+            <small>Final room-wise exam arrangement</small>
+          </a>
+          <a class="logout-link" href="login.html">
+            Logout
+            <small>Return to main login page</small>
+          </a>
+        </nav>
+
+        <div class="sidebar-note">
+          <p>Module</p>
+          <strong>Invigilation Management</strong>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Faculty Records</p>
+            <h1>Teachers List</h1>
+            <p>
+              This page contains the list of teachers with their department,
+              assigned exam room, and invigilation schedule.
+            </p>
+          </div>
+          <a class="primary-button" href="index.html">Back to Dashboard</a>
+        </header>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Invigilator Allocation Table</h2>
+              <p>Faculty members assigned for exam duty.</p>
+            </div>
+            <span class="panel-pill">48 Faculty Assigned</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Teacher ID</th>
+                  <th>Teacher Name</th>
+                  <th>Department</th>
+                  <th>Phone</th>
+                  <th>Exam Date</th>
+                  <th>Assigned Room</th>
+                  <th>Session</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>TCH101</td>
+                  <td>Dr. Meera Joshi</td>
+                  <td>Computer Science</td>
+                  <td>98765 22110</td>
+                  <td>24 Apr 2026</td>
+                  <td>A-201</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>TCH102</td>
+                  <td>Prof. Kiran Bhat</td>
+                  <td>Computer Science</td>
+                  <td>98450 12231</td>
+                  <td>24 Apr 2026</td>
+                  <td>A-202</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>TCH118</td>
+                  <td>Dr. Suma Prakash</td>
+                  <td>Information Science</td>
+                  <td>97311 45902</td>
+                  <td>25 Apr 2026</td>
+                  <td>B-104</td>
+                  <td>Afternoon</td>
+                </tr>
+                <tr>
+                  <td>TCH121</td>
+                  <td>Prof. Harish Gowda</td>
+                  <td>Information Science</td>
+                  <td>98861 34120</td>
+                  <td>25 Apr 2026</td>
+                  <td>B-105</td>
+                  <td>Afternoon</td>
+                </tr>
+                <tr>
+                  <td>TCH134</td>
+                  <td>Dr. Kavya Ramesh</td>
+                  <td>Electronics</td>
+                  <td>97420 65310</td>
+                  <td>26 Apr 2026</td>
+                  <td>C-301</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>TCH145</td>
+                  <td>Prof. Nitin Rao</td>
+                  <td>Mechanical</td>
+                  <td>99807 22214</td>
+                  <td>27 Apr 2026</td>
+                  <td>D-102</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>TCH152</td>
+                  <td>Dr. Shweta Menon</td>
+                  <td>Civil</td>
+                  <td>97911 80550</td>
+                  <td>27 Apr 2026</td>
+                  <td>D-104</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>TCH164</td>
+                  <td>Prof. Rahul Desai</td>
+                  <td>Electrical</td>
+                  <td>98458 90314</td>
+                  <td>28 Apr 2026</td>
+                  <td>C-204</td>
+                  <td>Afternoon</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <p class="footer-note">
+          You can add email, designation, or block number columns if your
+          project needs more details.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
