@@ -1,1 +1,175 @@
+  <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classrooms | Exam Room Allocation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand-mark">EA</div>
+        <div class="brand">
+          <p>Exam Room Allocation</p>
+          <h2>Admin <span>Dashboard</span></h2>
+        </div>
+        <p class="sidebar-copy">
+          Classroom planning helps the admin verify capacity, floor, and room
+          status before generating the final seating plan.
+        </p>
 
+        <nav class="nav-links">
+          <a href="index.html">
+            Dashboard
+            <small>Overview and quick access</small>
+          </a>
+          <a href="students.html">
+            Student List
+            <small>Registered students and room details</small>
+          </a>
+          <a href="teacher-list.html">
+            Teachers List
+            <small>Faculty and invigilation assignment</small>
+          </a>
+          <a class="active" href="classrooms.html">
+            Classrooms
+            <small>Rooms with capacity and status</small>
+          </a>
+          <a href="seating-plan.html">
+            Generate Seating Plan
+            <small>Final room-wise exam arrangement</small>
+          </a>
+          <a class="logout-link" href="login.html">
+            Logout
+            <small>Return to main login page</small>
+          </a>
+        </nav>
+
+        <div class="sidebar-note">
+          <p>Module</p>
+          <strong>Classroom Capacity Monitor</strong>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Room Details</p>
+            <h1>Classroom List</h1>
+            <p>
+              This page shows all classrooms with room number, block, floor, and
+              seating capacity so the admin can plan exam allocation accurately.
+            </p>
+          </div>
+          <a class="primary-button" href="index.html">Back to Dashboard</a>
+        </header>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Available Classrooms</h2>
+              <p>Capacity and availability status for each exam hall.</p>
+            </div>
+            <span class="panel-pill">24 Active Rooms</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Room No</th>
+                  <th>Block</th>
+                  <th>Floor</th>
+                  <th>Capacity</th>
+                  <th>Projector</th>
+                  <th>Exam Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>A-201</td>
+                  <td>Academic Block A</td>
+                  <td>2</td>
+                  <td>60</td>
+                  <td>Yes</td>
+                  <td>24 Apr 2026</td>
+                  <td><span class="status confirmed">Allocated</span></td>
+                </tr>
+                <tr>
+                  <td>A-202</td>
+                  <td>Academic Block A</td>
+                  <td>2</td>
+                  <td>60</td>
+                  <td>Yes</td>
+                  <td>24 Apr 2026</td>
+                  <td><span class="status confirmed">Allocated</span></td>
+                </tr>
+                <tr>
+                  <td>B-104</td>
+                  <td>Science Block B</td>
+                  <td>1</td>
+                  <td>54</td>
+                  <td>No</td>
+                  <td>25 Apr 2026</td>
+                  <td><span class="status confirmed">Allocated</span></td>
+                </tr>
+                <tr>
+                  <td>B-105</td>
+                  <td>Science Block B</td>
+                  <td>1</td>
+                  <td>54</td>
+                  <td>No</td>
+                  <td>25 Apr 2026</td>
+                  <td><span class="status confirmed">Allocated</span></td>
+                </tr>
+                <tr>
+                  <td>C-301</td>
+                  <td>Electronics Block C</td>
+                  <td>3</td>
+                  <td>60</td>
+                  <td>Yes</td>
+                  <td>26 Apr 2026</td>
+                  <td><span class="status active">Reserved</span></td>
+                </tr>
+                <tr>
+                  <td>D-102</td>
+                  <td>Main Block D</td>
+                  <td>1</td>
+                  <td>48</td>
+                  <td>No</td>
+                  <td>27 Apr 2026</td>
+                  <td><span class="status active">Reserved</span></td>
+                </tr>
+                <tr>
+                  <td>D-104</td>
+                  <td>Main Block D</td>
+                  <td>1</td>
+                  <td>48</td>
+                  <td>No</td>
+                  <td>27 Apr 2026</td>
+                  <td><span class="status ready">Ready</span></td>
+                </tr>
+                <tr>
+                  <td>C-204</td>
+                  <td>Electronics Block C</td>
+                  <td>2</td>
+                  <td>56</td>
+                  <td>Yes</td>
+                  <td>28 Apr 2026</td>
+                  <td><span class="status ready">Ready</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <p class="footer-note">
+          You can add more room facilities such as CCTV, ventilation, or lab
+          type if required.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>  
