@@ -1,1 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Portal | Exam Room Allocation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="login-page">
+    <div class="login-layout">
+      <section class="login-hero">
+        <div>
+          <span class="hero-chip">Exam Room Allocation System</span>
+          <h1>Unified Login Portal for Students, Teachers, and Admin</h1>
+          <p>
+            Use this main login page to enter USN and password, then choose the
+            dashboard you want to open. This is a frontend prototype for your
+            project, so each login button redirects to its related dashboard.
+          </p>
+        </div>
 
+        <div class="hero-stats">
+          <div>
+            <p>Student View</p>
+            <strong>Room + Time</strong>
+          </div>
+          <div>
+            <p>Teacher View</p>
+            <strong>Duty + Capacity</strong>
+          </div>
+          <div>
+            <p>Admin View</p>
+            <strong>Full Control</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="login-card">
+        <p class="eyebrow">Main Login Page</p>
+        <h2>Sign In</h2>
+        <p>
+          Enter your USN and password below, then choose one of the three login
+          options.
+        </p>
+
+        <form class="login-form">
+          <div class="input-group">
+            <label for="usn">USN</label>
+            <input
+              id="usn"
+              name="usn"
+              type="text"
+              placeholder="Enter USN or staff ID"
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter password"
+            />
+          </div>
+        </form>
+
+        <div class="role-grid">
+          <a class="primary-button role-button" href="student-dashboard.html">
+            Login as Student
+          </a>
+          <a class="secondary-button role-button" href="teachers.html">
+            Login as Teacher
+          </a>
+          <a class="admin-button role-button" href="index.html">
+            Login as Admin
+          </a>
+        </div>
+
+        <p class="login-note">
+          Use this file as your main project entry page because the admin
+          dashboard already uses <strong>index.html</strong>.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>
