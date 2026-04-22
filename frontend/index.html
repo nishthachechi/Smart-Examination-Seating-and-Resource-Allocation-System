@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Exam Room Allocation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand-mark">EA</div>
+        <div class="brand">
+          <p>Exam Room Allocation</p>
+          <h1>Admin <span>Dashboard</span></h1>
+        </div>
+        <p class="sidebar-copy">
+          Central control panel for managing students, invigilators, classrooms,
+          and the final exam seating plan.
+        </p>
 
+        <nav class="nav-links">
+          <a class="active" href="index.html">
+            Dashboard
+            <small>Overview and quick access</small>
+          </a>
+          <a href="students.html">
+            Student List
+            <small>Registered students and room details</small>
+          </a>
+          <a href="teacher-list.html">
+            Teachers List
+            <small>Faculty and invigilation assignment</small>
+          </a>
+          <a href="classrooms.html">
+            Classrooms
+            <small>Rooms with capacity and status</small>
+          </a>
+          <a href="seating-plan.html">
+            Generate Seating Plan
+            <small>Final room-wise exam arrangement</small>
+          </a>
+          <a class="logout-link" href="login.html">
+            Logout
+            <small>Return to main login page</small>
+          </a>
+        </nav>
+
+        <div class="sidebar-note">
+          <p>Current Session</p>
+          <strong>End Semester Examination 2026</strong>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Admin Frontend</p>
+            <h1>Manage Exam Hall Allocation</h1>
+            <p>
+              This admin page lets you move between all important records in the
+              exam allocation system. Each option redirects to a table-based
+              page so the admin can quickly monitor students, teachers,
+              classrooms, and seating arrangements.
+            </p>
+          </div>
+          <a class="primary-button" href="seating-plan.html">Open Seating Plan</a>
+        </header>
+
+        <section class="metrics">
+          <article class="metric-card teal">
+            <p>Total Students</p>
+            <h2>720</h2>
+            <strong>Across all departments</strong>
+          </article>
+          <article class="metric-card gold">
+            <p>Invigilators Assigned</p>
+            <h2>48</h2>
+            <strong>Morning and afternoon sessions</strong>
+          </article>
+          <article class="metric-card rose">
+            <p>Available Classrooms</p>
+            <h2>24</h2>
+            <strong>Capacity verified and active</strong>
+          </article>
+          <article class="metric-card dark">
+            <p>Plans Generated</p>
+            <h2>12</h2>
+            <strong>Latest update: 22 Apr 2026</strong>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Quick Access</h2>
+              <p>Select any module to open the corresponding table page.</p>
+            </div>
+            <span class="panel-pill">4 Admin Modules</span>
+          </div>
