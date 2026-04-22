@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard | Exam Room Allocation</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand-mark">EA</div>
+        <div class="brand">
+          <p>Exam Room Allocation</p>
+          <h2>Teacher <span>Dashboard</span></h2>
+        </div>
+        <p class="sidebar-copy">
+          Faculty view of the exam allocation system with personal details and
+          allotted invigilation rooms.
+        </p>
 
+        <nav class="nav-links">
+          <a href="login.html">
+            Login Portal
+            <small>Choose student, teacher, or admin login</small>
+          </a>
+          <a href="student-dashboard.html">
+            Student Dashboard
+            <small>Student details and exam schedule</small>
+          </a>
+          <a class="active" href="teachers.html">
+            Teacher Dashboard
+            <small>Faculty details and room assignment</small>
+          </a>
+          <a href="index.html">
+            Admin Dashboard
+            <small>Admin tables and seating plan</small>
+          </a>
+        </nav>
+
+        <div class="sidebar-note">
+          <p>Teacher Status</p>
+          <strong>Invigilation Assigned</strong>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Teacher View</p>
+            <h1>Teacher Dashboard</h1>
+            <p>
+              This page includes the teacher details and the room allocation
+              table with exam date and room capacity.
+            </p>
+          </div>
+          <a class="primary-button" href="login.html">Back to Login</a>
+        </header>
+
+        <section class="summary-grid">
+          <article class="summary-card teal">
+            <p>Teacher Name</p>
+            <h2>Dr. Meera Joshi</h2>
+          </article>
+          <article class="summary-card gold">
+            <p>USN / Staff ID</p>
+            <h2>TCH101</h2>
+          </article>
+          <article class="summary-card dark">
+            <p>Department</p>
+            <h2>Computer Science</h2>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Room Allotment Table</h2>
+              <p>Teacher invigilation rooms with date and room capacity.</p>
+            </div>
+            <span class="panel-pill">3 Assigned Duties</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Allotted Room</th>
+                  <th>Exam Date</th>
+                  <th>Room Capacity</th>
+                  <th>Session</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>22CS61</td>
+                  <td>A-201</td>
+                  <td>24 Apr 2026</td>
+                  <td>60</td>
+                  <td>Morning</td>
+                </tr>
+                <tr>
+                  <td>22CS63</td>
+                  <td>B-204</td>
+                  <td>29 Apr 2026</td>
+                  <td>54</td>
+                  <td>Afternoon</td>
+                </tr>
+                <tr>
+                  <td>22CS64</td>
+                  <td>C-302</td>
+                  <td>02 May 2026</td>
+                  <td>56</td>
+                  <td>Morning</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <p class="footer-note">
+          Update the teacher ID label if your project uses a separate staff code
+          instead of USN.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
