@@ -41,7 +41,7 @@ def fetch_invigilators():
     return cursor.fetchall()
 
 # -----------------------------
-# STREAM FILTER (FIXED)
+# FIXED STREAM FILTER
 # -----------------------------
 def filter_students(students, stream):
     if stream.lower() in ["all", "common"]:
@@ -52,11 +52,11 @@ def filter_students(students, stream):
 
     return [
         s for s in students
-        if any(b == s['branch'].upper() for b in branches)
+        if s['branch'].upper() in branches
     ]
 
 # -----------------------------
-# ALTERNATING BRANCH LOGIC
+# ALTERNATING LOGIC
 # -----------------------------
 def alternate(students):
     groups = defaultdict(list)
@@ -99,8 +99,6 @@ def generate():
         # -------------------------
         # SEATING
         # -------------------------
-        seating_data = []
-
         for room in rooms:
             for seat in range(1, room['capacity'] + 1):
                 if idx >= len(arranged):
@@ -108,32 +106,33 @@ def generate():
 
                 s = arranged[idx]
 
-                seating_data.append((
+                cursor.execute("""
+                    INSERT IGNORE INTO seating_arrangement
+                    (admission_id, name, branch, section, room_number, seat_number, exam_date, time_slot)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                """, (
                     s['admission_id'], s['name'], s['branch'], s['section'],
                     room['room_number'], seat, date, slot
                 ))
 
                 idx += 1
 
-        cursor.executemany("""
-            INSERT IGNORE INTO seating_arrangement
-            (admission_id, name, branch, section, room_number, seat_number, exam_date, time_slot)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-        """, seating_data)
-
         # -------------------------
-        # INVIGILATORS (FIXED LOGIC)
+        # INVIGILATORS (improved)
         # -------------------------
         random.shuffle(invigilators)
         used = set()
-        inv_data = []
 
         for room in rooms:
             for inv in invigilators:
                 if inv['registration_id'] not in used:
                     used.add(inv['registration_id'])
 
-                    inv_data.append((
+                    cursor.execute("""
+                        INSERT IGNORE INTO resource_allocation
+                        (registration_id, name, room_number, exam_date, time_slot)
+                        VALUES (%s,%s,%s,%s,%s)
+                    """, (
                         inv['registration_id'],
                         inv['name'],
                         room['room_number'],
@@ -142,17 +141,11 @@ def generate():
                     ))
                     break
 
-        cursor.executemany("""
-            INSERT IGNORE INTO resource_allocation
-            (registration_id, name, room_number, exam_date, time_slot)
-            VALUES (%s,%s,%s,%s,%s)
-        """, inv_data)
-
         conn.commit()
 
 # -----------------------------
 # RUN
 # -----------------------------
 generate()
-print("✅ Seating & Invigilation Generated Successfully!")
+print("✅ Done!")
 
