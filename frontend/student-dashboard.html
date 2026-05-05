@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Dashboard | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -20,7 +21,7 @@
         </p>
 
         <nav class="nav-links">
-          <a href="login.html">
+          <a href="login.html" data-logout="true">
             Login Portal
             <small>Choose student, teacher, or admin login</small>
           </a>
@@ -54,21 +55,21 @@
               schedule in table format.
             </p>
           </div>
-          <a class="primary-button" href="login.html">Back to Login</a>
+          <a class="primary-button" href="login.html" data-logout="true">Back to Login</a>
         </header>
 
         <section class="summary-grid">
           <article class="summary-card teal">
             <p>Student Name</p>
-            <h2>Ananya Rao</h2>
+            <h2 id="student-name">Ananya Rao</h2>
           </article>
           <article class="summary-card gold">
             <p>USN</p>
-            <h2>1RV22IS019</h2>
+            <h2 id="student-usn">1RV22IS019</h2>
           </article>
           <article class="summary-card dark">
             <p>Department</p>
-            <h2>Information Science</h2>
+            <h2 id="student-department">Information Science</h2>
           </article>
         </section>
 
@@ -78,7 +79,7 @@
               <h2>Exam Allocation Table</h2>
               <p>Allocated room, exam date, and time for the student.</p>
             </div>
-            <span class="panel-pill">3 Upcoming Exams</span>
+            <span class="panel-pill" id="student-exam-count">0 Upcoming Exams</span>
           </div>
 
           <div class="table-wrap">
@@ -92,29 +93,7 @@
                   <th>Time</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>22IS62</td>
-                  <td>Machine Learning</td>
-                  <td>B-105</td>
-                  <td>25 Apr 2026</td>
-                  <td>1:30 PM - 4:30 PM</td>
-                </tr>
-                <tr>
-                  <td>22IS63</td>
-                  <td>Cloud Computing</td>
-                  <td>C-204</td>
-                  <td>28 Apr 2026</td>
-                  <td>9:30 AM - 12:30 PM</td>
-                </tr>
-                <tr>
-                  <td>22IS64</td>
-                  <td>Web Technology</td>
-                  <td>A-201</td>
-                  <td>30 Apr 2026</td>
-                  <td>1:30 PM - 4:30 PM</td>
-                </tr>
-              </tbody>
+              <tbody id="student-exam-body"></tbody>
             </table>
           </div>
         </section>
@@ -127,3 +106,5 @@
     </div>
   </body>
 </html>
+
+
