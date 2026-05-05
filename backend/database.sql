@@ -476,6 +476,9 @@ INSERT INTO invigilators VALUES
 
 SELECT * FROM invigilators;
 
+-- -----------------------------
+-- SEATING TABLE
+-- -----------------------------
 CREATE TABLE seating_arrangement (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -495,7 +498,11 @@ CREATE TABLE seating_arrangement (
 
     -- Prevent same student getting multiple seats in same exam
     UNIQUE (exam_date, time_slot, admission_id)
+);
 
+-- -----------------------------
+-- INVIGILATOR TABLE
+-- -----------------------------
 CREATE TABLE resource_allocation (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -514,7 +521,8 @@ CREATE TABLE resource_allocation (
     UNIQUE (exam_date, time_slot, registration_id)
 );
 
-TRUNCATE seating_arrangement;
-TRUNCATE resource_allocation;
-
-
+-- -----------------------------
+-- CLEAR OLD DATA BEFORE RUN
+-- -----------------------------
+TRUNCATE TABLE seating_arrangement;
+TRUNCATE TABLE resource_allocation;
