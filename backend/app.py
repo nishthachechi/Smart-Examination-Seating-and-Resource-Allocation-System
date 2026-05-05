@@ -2,6 +2,9 @@ import mysql.connector
 import random
 from collections import defaultdict
 
+# -----------------------------
+# DB CONNECTION
+# -----------------------------
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -31,8 +34,8 @@ def fetch_rooms():
 
 def fetch_exams():
     cursor.execute("""
-       SELECT DISTINCT exam_date, time_slot, stream, subject_code
-    FROM exam_timetable
+        SELECT DISTINCT exam_date, time_slot, stream 
+        FROM exam_timetable
     """)
     return cursor.fetchall()
 
@@ -41,25 +44,26 @@ def fetch_invigilators():
     return cursor.fetchall()
 
 # -----------------------------
-# FIXED STREAM FILTER
+# STREAM FILTER
 # -----------------------------
 def filter_students(students, stream):
+    if not stream:
+        return []
+
     if stream.lower() in ["all", "common"]:
         return students
 
     stream = stream.replace("&", "/")
     branches = [s.strip().upper() for s in stream.split("/")]
 
-    return [
-        s for s in students
-        if s['branch'].upper() in branches
-    ]
+    return [s for s in students if s['branch'].upper() in branches]
 
 # -----------------------------
-# ALTERNATING LOGIC
+# ALTERNATE BRANCHES
 # -----------------------------
 def alternate(students):
     groups = defaultdict(list)
+
     for s in students:
         groups[s['branch']].append(s)
 
@@ -67,16 +71,28 @@ def alternate(students):
         random.shuffle(g)
 
     result = []
+
     while any(groups.values()):
         for k in list(groups.keys()):
             if groups[k]:
                 result.append(groups[k].pop())
+
     return result
 
 # -----------------------------
-# MAIN LOGIC
+# CLEAR OLD DATA (IMPORTANT)
+# -----------------------------
+def clear_tables():
+    cursor.execute("DELETE FROM seating_arrangement")
+    cursor.execute("DELETE FROM resource_allocation")
+    conn.commit()
+
+# -----------------------------
+# MAIN GENERATOR
 # -----------------------------
 def generate():
+    clear_tables()
+
     all_students = fetch_all_students()
     rooms = fetch_rooms()
     exams = fetch_exams()
@@ -90,8 +106,12 @@ def generate():
         print(f"Processing {date} | {slot} | {stream}")
 
         students = filter_students(all_students, stream)
-        random.shuffle(students)
 
+        if not students:
+            print("⚠ No students for this stream")
+            continue
+
+        random.shuffle(students)
         arranged = alternate(students)
 
         idx = 0
@@ -101,45 +121,61 @@ def generate():
         # -------------------------
         for room in rooms:
             for seat in range(1, room['capacity'] + 1):
+
                 if idx >= len(arranged):
                     break
 
                 s = arranged[idx]
 
-                cursor.execute("""
-                    INSERT IGNORE INTO seating_arrangement
-                    (admission_id, name, branch, section, room_number, seat_number, exam_date, time_slot)
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-                """, (
-                    s['admission_id'], s['name'], s['branch'], s['section'],
-                    room['room_number'], seat, date, slot
-                ))
+                try:
+                    cursor.execute("""
+                        INSERT INTO seating_arrangement
+                        (admission_id, name, branch, section,
+                         room_number, seat_number, exam_date, time_slot)
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                    """, (
+                        s['admission_id'],
+                        s['name'],
+                        s['branch'],
+                        s['section'],
+                        room['room_number'],
+                        seat,
+                        date,
+                        slot
+                    ))
+                except:
+                    pass
 
                 idx += 1
 
         # -------------------------
-        # INVIGILATORS (improved)
+        # INVIGILATOR ASSIGNMENT
         # -------------------------
         random.shuffle(invigilators)
-        used = set()
+        inv_index = 0
 
         for room in rooms:
-            for inv in invigilators:
-                if inv['registration_id'] not in used:
-                    used.add(inv['registration_id'])
+            if inv_index >= len(invigilators):
+                inv_index = 0  # reuse if needed
 
-                    cursor.execute("""
-                        INSERT IGNORE INTO resource_allocation
-                        (registration_id, name, room_number, exam_date, time_slot)
-                        VALUES (%s,%s,%s,%s,%s)
-                    """, (
-                        inv['registration_id'],
-                        inv['name'],
-                        room['room_number'],
-                        date,
-                        slot
-                    ))
-                    break
+            inv = invigilators[inv_index]
+
+            try:
+                cursor.execute("""
+                    INSERT INTO resource_allocation
+                    (registration_id, name, room_number, exam_date, time_slot)
+                    VALUES (%s,%s,%s,%s,%s)
+                """, (
+                    inv['registration_id'],
+                    inv['name'],
+                    room['room_number'],
+                    date,
+                    slot
+                ))
+            except:
+                pass
+
+            inv_index += 1
 
         conn.commit()
 
@@ -147,5 +183,4 @@ def generate():
 # RUN
 # -----------------------------
 generate()
-print("✅ Done!")
-
+print("✅ Seating & Invigilation Generated Successfully!")
