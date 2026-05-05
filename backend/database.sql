@@ -485,7 +485,22 @@ CREATE TABLE resource_allocation
 
 SELECT * FROM resource_allocation;
 
+-- Add missing columns
+ALTER TABLE seating_arrangement
+ADD exam_date DATE,
+ADD time_slot VARCHAR(30);
 
+ALTER TABLE resource_allocation
+ADD exam_date DATE,
+ADD time_slot VARCHAR(30);
+
+-- Add constraints to prevent duplicates
+ALTER TABLE seating_arrangement
+ADD UNIQUE (admission_id, exam_date, time_slot),
+ADD UNIQUE (room_number, seat_number, exam_date, time_slot);
+
+ALTER TABLE resource_allocation
+ADD UNIQUE (room_number, exam_date, time_slot);
 
 
 
