@@ -5,13 +5,17 @@ from collections import defaultdict
 # -----------------------------
 # DB CONNECTION
 # -----------------------------
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="your_password",
-    database="examination"
-)
-cursor = conn.cursor(dictionary=True)
+try:
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="your_password",
+        database="examination"
+    )
+    cursor = conn.cursor(dictionary=True)
+except Exception as e:
+    print("❌ Database connection failed:", e)
+    exit()
 
 # -----------------------------
 # FETCH DATA
@@ -93,43 +97,48 @@ def alternate(students):
 # MAIN LOGIC
 # -----------------------------
 def generate():
-    clear_old()
+    try:
+        clear_old()
 
-    all_students = fetch_all_students()
-    rooms = fetch_rooms()
-    exams = fetch_exams()
-    invigilators = fetch_invigilators()
+        all_students = fetch_all_students()
+        rooms = fetch_rooms()
+        exams = fetch_exams()
+        invigilators = fetch_invigilators()
 
-    for exam in exams:
-        date = exam['exam_date']
-        slot = exam['time_slot']
-        stream = exam['stream']
+        total_seats = sum(room['capacity'] for room in rooms)
 
-        print(f"\nProcessing: {date} | {slot} | {stream}")
+        for exam in exams:
+            date = exam['exam_date']
+            slot = exam['time_slot']
+            stream = exam['stream']
 
-        students = filter_students(all_students, stream)
+            print(f"\n📌 Processing: {date} | {slot} | {stream}")
 
-        if not students:
-            print("⚠ No students found")
-            continue
+            students = filter_students(all_students, stream)
 
-        random.shuffle(students)
-        arranged = alternate(students)
+            if not students:
+                print("⚠ No students found")
+                continue
 
-        idx = 0
+            if len(students) > total_seats:
+                print("⚠ Warning: Not enough seats! Some students will not be assigned.")
 
-        # -------------------------
-        # SEATING
-        # -------------------------
-        for room in rooms:
-            for seat in range(1, room['capacity'] + 1):
+            random.shuffle(students)
+            arranged = alternate(students)
 
-                if idx >= len(arranged):
-                    break
+            idx = 0
 
-                s = arranged[idx]
+            # -------------------------
+            # SEATING
+            # -------------------------
+            for room in rooms:
+                for seat in range(1, room['capacity'] + 1):
 
-                try:
+                    if idx >= len(arranged):
+                        break
+
+                    s = arranged[idx]
+
                     cursor.execute("""
                         INSERT INTO seating_arrangement
                         (admission_id, name, branch, section,
@@ -145,44 +154,48 @@ def generate():
                         date,
                         slot
                     ))
-                except Exception as e:
-                    print("Seat insert error:", e)
 
-                idx += 1
+                    idx += 1
 
-            if idx >= len(arranged):
-                break   # <-- FIXED outer break
+                if idx >= len(arranged):
+                    break
 
-        # -------------------------
-        # INVIGILATORS
-        # -------------------------
-        random.shuffle(invigilators)
-        inv_index = 0
+            # -------------------------
+            # INVIGILATORS
+            # -------------------------
+            if not invigilators:
+                print("⚠ No invigilators available")
+            else:
+                random.shuffle(invigilators)
 
-        for room in rooms:
-            inv = invigilators[inv_index % len(invigilators)]
+                for i, room in enumerate(rooms):
+                    inv = invigilators[i % len(invigilators)]
 
-            try:
-                cursor.execute("""
-                    INSERT INTO resource_allocation
-                    (registration_id, name, room_number, exam_date, time_slot)
-                    VALUES (%s,%s,%s,%s,%s)
-                """, (
-                    inv['registration_id'],
-                    inv['name'],
-                    room['room_number'],
-                    date,
-                    slot
-                ))
-            except Exception as e:
-                print("Invigilator error:", e)
+                    cursor.execute("""
+                        INSERT INTO resource_allocation
+                        (registration_id, name, room_number, exam_date, time_slot)
+                        VALUES (%s,%s,%s,%s,%s)
+                    """, (
+                        inv['registration_id'],
+                        inv['name'],
+                        room['room_number'],
+                        date,
+                        slot
+                    ))
 
-            inv_index += 1
+            conn.commit()
 
-        conn.commit()
+        print("\n✅ Seating & Invigilation Generated Successfully!")
+
+    except Exception as e:
+        conn.rollback()
+        print("❌ Error occurred:", e)
+
+    finally:
+        cursor.close()
+        conn.close()
 
 # -----------------------------
 # RUN
 # -----------------------------
 generate()
-print("\n✅ Seating & Invigilation Generated Successfully!")
