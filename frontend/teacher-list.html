@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teachers List | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -40,7 +41,7 @@
             Generate Seating Plan
             <small>Final room-wise exam arrangement</small>
           </a>
-          <a class="logout-link" href="login.html">
+          <a class="logout-link" href="login.html" data-logout="true">
             Logout
             <small>Return to main login page</small>
           </a>
@@ -71,7 +72,7 @@
               <h2>Invigilator Allocation Table</h2>
               <p>Faculty members assigned for exam duty.</p>
             </div>
-            <span class="panel-pill">48 Faculty Assigned</span>
+            <span class="panel-pill" id="admin-teacher-count">0 Faculty Assigned</span>
           </div>
 
           <div class="table-wrap">
@@ -87,80 +88,7 @@
                   <th>Session</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>TCH101</td>
-                  <td>Dr. Meera Joshi</td>
-                  <td>Computer Science</td>
-                  <td>98765 22110</td>
-                  <td>24 Apr 2026</td>
-                  <td>A-201</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>TCH102</td>
-                  <td>Prof. Kiran Bhat</td>
-                  <td>Computer Science</td>
-                  <td>98450 12231</td>
-                  <td>24 Apr 2026</td>
-                  <td>A-202</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>TCH118</td>
-                  <td>Dr. Suma Prakash</td>
-                  <td>Information Science</td>
-                  <td>97311 45902</td>
-                  <td>25 Apr 2026</td>
-                  <td>B-104</td>
-                  <td>Afternoon</td>
-                </tr>
-                <tr>
-                  <td>TCH121</td>
-                  <td>Prof. Harish Gowda</td>
-                  <td>Information Science</td>
-                  <td>98861 34120</td>
-                  <td>25 Apr 2026</td>
-                  <td>B-105</td>
-                  <td>Afternoon</td>
-                </tr>
-                <tr>
-                  <td>TCH134</td>
-                  <td>Dr. Kavya Ramesh</td>
-                  <td>Electronics</td>
-                  <td>97420 65310</td>
-                  <td>26 Apr 2026</td>
-                  <td>C-301</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>TCH145</td>
-                  <td>Prof. Nitin Rao</td>
-                  <td>Mechanical</td>
-                  <td>99807 22214</td>
-                  <td>27 Apr 2026</td>
-                  <td>D-102</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>TCH152</td>
-                  <td>Dr. Shweta Menon</td>
-                  <td>Civil</td>
-                  <td>97911 80550</td>
-                  <td>27 Apr 2026</td>
-                  <td>D-104</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>TCH164</td>
-                  <td>Prof. Rahul Desai</td>
-                  <td>Electrical</td>
-                  <td>98458 90314</td>
-                  <td>28 Apr 2026</td>
-                  <td>C-204</td>
-                  <td>Afternoon</td>
-                </tr>
-              </tbody>
+              <tbody id="admin-teachers-body"></tbody>
             </table>
           </div>
         </section>
@@ -173,3 +101,5 @@
     </div>
   </body>
 </html>
+
+
