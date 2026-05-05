@@ -51,7 +51,11 @@
               id="usn"
               name="usn"
               type="text"
-              placeholder="Enter USN or staff ID"
+              placeholder="Enter 10-character ID"
+              maxlength="10"
+              minlength="10"
+              pattern="[A-Za-z0-9]{10}"
+              title="Enter exactly 10 letters or numbers"
             />
           </div>
 
@@ -101,8 +105,9 @@
           <p class="credential-title">Sample Credentials</p>
           <div class="credential-list">
             <p><strong>Student:</strong> <code>1RV22IS019 / student123</code></p>
-            <p><strong>Teacher:</strong> <code>TCH101 / teacher123</code></p>
-            <p><strong>Admin:</strong> <code>admin / admin123</code></p>
+            <p><strong>Teacher:</strong> <code>TCH2200101 / teacher123</code></p>
+            <p><strong>Admin:</strong> <code>ADMN000001 / admin123</code></p>
+            <p><strong>Format:</strong> <code>10 letters or numbers</code></p>
           </div>
         </div>
 
