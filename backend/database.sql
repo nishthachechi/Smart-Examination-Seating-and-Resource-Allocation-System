@@ -476,31 +476,8 @@ INSERT INTO invigilators VALUES
 
 SELECT * FROM invigilators;
 
-CREATE TABLE seating_arrangement
-(admission_id VARCHAR(10),name VARCHAR(20),branch VARCHAR(20),section VARCHAR(20),room_number INT, seat_number INT);
-SELECT * FROM seating_arrangement;
 
-CREATE TABLE resource_allocation
-(registration_id VARCHAR(10),name VARCHAR(20),room_number INT);
 
-SELECT * FROM resource_allocation;
-
--- Add missing columns
-ALTER TABLE seating_arrangement
-ADD exam_date DATE,
-ADD time_slot VARCHAR(30);
-
-ALTER TABLE resource_allocation
-ADD exam_date DATE,
-ADD time_slot VARCHAR(30);
-
--- Add constraints to prevent duplicates
-ALTER TABLE seating_arrangement
-ADD UNIQUE (admission_id, exam_date, time_slot),
-ADD UNIQUE (room_number, seat_number, exam_date, time_slot);
-
-ALTER TABLE resource_allocation
-ADD UNIQUE (room_number, exam_date, time_slot);
 
 
 
