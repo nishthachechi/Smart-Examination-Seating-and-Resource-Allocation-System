@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student List | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -40,7 +41,7 @@
             Generate Seating Plan
             <small>Final room-wise exam arrangement</small>
           </a>
-          <a class="logout-link" href="login.html">
+          <a class="logout-link" href="login.html" data-logout="true">
             Logout
             <small>Return to main login page</small>
           </a>
@@ -71,7 +72,7 @@
               <h2>Registered Students</h2>
               <p>Sample data for the exam room allocation project.</p>
             </div>
-            <span class="panel-pill">72 Students in Sample View</span>
+            <span class="panel-pill" id="admin-student-count">0 Students in Sample View</span>
           </div>
 
           <div class="table-wrap">
@@ -87,80 +88,7 @@
                   <th>Room Allotted</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1RV22CS001</td>
-                  <td>Aarav Sharma</td>
-                  <td>Computer Science</td>
-                  <td>6</td>
-                  <td>22CS61</td>
-                  <td>24 Apr 2026</td>
-                  <td>A-201</td>
-                </tr>
-                <tr>
-                  <td>1RV22CS014</td>
-                  <td>Diya Nair</td>
-                  <td>Computer Science</td>
-                  <td>6</td>
-                  <td>22CS61</td>
-                  <td>24 Apr 2026</td>
-                  <td>A-202</td>
-                </tr>
-                <tr>
-                  <td>1RV22IS008</td>
-                  <td>Rohan Kulkarni</td>
-                  <td>Information Science</td>
-                  <td>6</td>
-                  <td>22IS62</td>
-                  <td>25 Apr 2026</td>
-                  <td>B-104</td>
-                </tr>
-                <tr>
-                  <td>1RV22IS019</td>
-                  <td>Ananya Rao</td>
-                  <td>Information Science</td>
-                  <td>6</td>
-                  <td>22IS62</td>
-                  <td>25 Apr 2026</td>
-                  <td>B-105</td>
-                </tr>
-                <tr>
-                  <td>1RV22EC005</td>
-                  <td>Neel Verma</td>
-                  <td>Electronics</td>
-                  <td>5</td>
-                  <td>22EC53</td>
-                  <td>26 Apr 2026</td>
-                  <td>C-301</td>
-                </tr>
-                <tr>
-                  <td>1RV22ME011</td>
-                  <td>Sanjana Patel</td>
-                  <td>Mechanical</td>
-                  <td>5</td>
-                  <td>22ME51</td>
-                  <td>27 Apr 2026</td>
-                  <td>D-102</td>
-                </tr>
-                <tr>
-                  <td>1RV22CV016</td>
-                  <td>Vikram Shetty</td>
-                  <td>Civil</td>
-                  <td>5</td>
-                  <td>22CV54</td>
-                  <td>27 Apr 2026</td>
-                  <td>D-104</td>
-                </tr>
-                <tr>
-                  <td>1RV22EE009</td>
-                  <td>Ishita Reddy</td>
-                  <td>Electrical</td>
-                  <td>5</td>
-                  <td>22EE55</td>
-                  <td>28 Apr 2026</td>
-                  <td>C-204</td>
-                </tr>
-              </tbody>
+              <tbody id="admin-students-body"></tbody>
             </table>
           </div>
         </section>
@@ -172,3 +100,5 @@
     </div>
   </body>
 </html>
+
+
