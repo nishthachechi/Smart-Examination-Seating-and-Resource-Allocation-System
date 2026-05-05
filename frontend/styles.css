@@ -98,7 +98,7 @@ a {
   color: rgba(247, 244, 238, 0.72);
   line-height: 1.6;
   font-size: 0.95rem;
-    }
+}
 
 .nav-links {
   display: grid;
@@ -198,7 +198,7 @@ a {
   max-width: 720px;
   color: var(--muted);
   line-height: 1.7;
- }
+}
 
 .primary-button,
 .secondary-button {
@@ -298,7 +298,7 @@ a {
 
 .panel-header {
   display: flex;
-    justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
   margin-bottom: 18px;
@@ -398,7 +398,7 @@ th,
 td {
   padding: 16px 18px;
   text-align: left;
-      border-bottom: 1px solid rgba(20, 48, 59, 0.08);
+  border-bottom: 1px solid rgba(20, 48, 59, 0.08);
 }
 
 tbody tr:nth-child(even) {
@@ -498,7 +498,7 @@ tbody tr:hover {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 24px;
-     min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
 }
 
 .login-hero,
@@ -632,6 +632,67 @@ tbody tr:hover {
   width: 100%;
 }
 
+.form-message {
+  margin: 16px 0 0;
+  padding: 13px 15px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.form-message.error {
+  color: #8e3324;
+  background: rgba(191, 95, 79, 0.12);
+  border-color: rgba(191, 95, 79, 0.26);
+}
+
+.form-message.success {
+  color: #0d675f;
+  background: rgba(45, 168, 153, 0.12);
+  border-color: rgba(45, 168, 153, 0.22);
+}
+
+.credential-card {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(247, 244, 238, 0.7);
+  border: 1px solid rgba(20, 48, 59, 0.08);
+}
+
+.credential-title {
+  margin: 0 0 10px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.credential-list {
+  display: grid;
+  gap: 8px;
+}
+
+.credential-list p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.credential-list strong {
+  color: var(--teal);
+}
+
+.credential-list code {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(20, 48, 59, 0.08);
+  color: var(--text);
+  font-family: "Consolas", "Courier New", monospace;
+}
+
 .admin-button {
   display: inline-flex;
   align-items: center;
@@ -733,3 +794,4 @@ tbody tr:hover {
     border-radius: 26px;
   }
 }
+
