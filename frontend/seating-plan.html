@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Seating Plan | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -40,7 +41,7 @@
             Generate Seating Plan
             <small>Final room-wise exam arrangement</small>
           </a>
-          <a class="logout-link" href="login.html">
+          <a class="logout-link" href="login.html" data-logout="true">
             Logout
             <small>Return to main login page</small>
           </a>
@@ -69,22 +70,22 @@
         <section class="metrics">
           <article class="metric-card teal">
             <p>Exam Rooms Used</p>
-            <h2>8</h2>
+            <h2 id="plan-room-count">0</h2>
             <strong>Across two sessions</strong>
           </article>
           <article class="metric-card gold">
             <p>Students Seated</p>
-            <h2>276</h2>
+            <h2 id="plan-student-count">0</h2>
             <strong>For the shown sample plan</strong>
           </article>
           <article class="metric-card rose">
             <p>Invigilators Assigned</p>
-            <h2>8</h2>
+            <h2 id="plan-invigilator-count">0</h2>
             <strong>One faculty per room</strong>
           </article>
           <article class="metric-card dark">
             <p>Plan Status</p>
-            <h2>Ready</h2>
+            <h2 id="plan-status-label">Ready</h2>
             <strong>Approved by admin</strong>
           </article>
         </section>
@@ -95,7 +96,7 @@
               <h2>Room-wise Seating Plan</h2>
               <p>Example table for the generated hall allocation output.</p>
             </div>
-            <span class="panel-pill">Last Generated: 22 Apr 2026</span>
+            <span class="panel-pill" id="plan-last-generated">Last Generated: 22 Apr 2026</span>
           </div>
 
           <div class="table-wrap">
@@ -112,88 +113,7 @@
                   <th>Invigilator</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>SP-2401</td>
-                  <td>24 Apr 2026</td>
-                  <td>Morning</td>
-                  <td>22CS61</td>
-                  <td>A-201</td>
-                  <td>58</td>
-                  <td>58 / 60</td>
-                  <td>Dr. Meera Joshi</td>
-                </tr>
-                <tr>
-                  <td>SP-2402</td>
-                  <td>24 Apr 2026</td>
-                  <td>Morning</td>
-                  <td>22CS61</td>
-                  <td>A-202</td>
-                  <td>60</td>
-                  <td>60 / 60</td>
-                  <td>Prof. Kiran Bhat</td>
-                </tr>
-                <tr>
-                  <td>SP-2501</td>
-                  <td>25 Apr 2026</td>
-                  <td>Afternoon</td>
-                  <td>22IS62</td>
-                  <td>B-104</td>
-                  <td>50</td>
-                  <td>50 / 54</td>
-                  <td>Dr. Suma Prakash</td>
-                </tr>
-                <tr>
-                  <td>SP-2502</td>
-                  <td>25 Apr 2026</td>
-                  <td>Afternoon</td>
-                  <td>22IS62</td>
-                  <td>B-105</td>
-                  <td>52</td>
-                  <td>52 / 54</td>
-                  <td>Prof. Harish Gowda</td>
-                </tr>
-                <tr>
-                  <td>SP-2601</td>
-                  <td>26 Apr 2026</td>
-                  <td>Morning</td>
-                  <td>22EC53</td>
-                  <td>C-301</td>
-                  <td>56</td>
-                  <td>56 / 60</td>
-                  <td>Dr. Kavya Ramesh</td>
-                </tr>
-                <tr>
-                  <td>SP-2701</td>
-                  <td>27 Apr 2026</td>
-                  <td>Morning</td>
-                  <td>22ME51</td>
-                  <td>D-102</td>
-                  <td>46</td>
-                  <td>46 / 48</td>
-                  <td>Prof. Nitin Rao</td>
-                </tr>
-                <tr>
-                  <td>SP-2702</td>
-                  <td>27 Apr 2026</td>
-                  <td>Morning</td>
-                  <td>22CV54</td>
-                  <td>D-104</td>
-                  <td>44</td>
-                  <td>44 / 48</td>
-                  <td>Dr. Shweta Menon</td>
-                </tr>
-                <tr>
-                  <td>SP-2801</td>
-                  <td>28 Apr 2026</td>
-                  <td>Afternoon</td>
-                  <td>22EE55</td>
-                  <td>C-204</td>
-                  <td>54</td>
-                  <td>54 / 56</td>
-                  <td>Prof. Rahul Desai</td>
-                </tr>
-              </tbody>
+              <tbody id="admin-seating-body"></tbody>
             </table>
           </div>
         </section>
@@ -206,6 +126,5 @@
     </div>
   </body>
 </html>
-
 
 
