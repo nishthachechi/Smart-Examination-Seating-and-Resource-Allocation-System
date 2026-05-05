@@ -1,22 +1,22 @@
 import mysql.connector
 import random
+from collections import defaultdict
 
-# ---------------------------
+# -----------------------------
 # DATABASE CONNECTION
-# ---------------------------
-db = mysql.connector.connect(
+# -----------------------------
+conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="yourpassword",   # <-- change this
+    password="your_password",
     database="examination"
 )
+cursor = conn.cursor(dictionary=True)
 
-cursor = db.cursor(dictionary=True)
-
-# ---------------------------
+# -----------------------------
 # FETCH ALL STUDENTS
-# ---------------------------
-def get_all_students():
+# -----------------------------
+def fetch_all_students():
     tables = [
         "cse_students_a",
         "me_students_a",
@@ -27,123 +27,177 @@ def get_all_students():
         "cse_aiml_students_a"
     ]
     
-    all_students = []
+    students = []
     
     for table in tables:
         cursor.execute(f"SELECT * FROM {table}")
-        data = cursor.fetchall()
-        all_students.extend(data)
+        students.extend(cursor.fetchall())
     
-    return all_students
+    return students
 
-
-# ---------------------------
+# -----------------------------
 # FETCH ROOMS
-# ---------------------------
-def get_rooms():
-    cursor.execute("SELECT * FROM rooms")
+# -----------------------------
+def fetch_rooms():
+    cursor.execute("SELECT * FROM rooms ORDER BY room_number")
     return cursor.fetchall()
 
-
-# ---------------------------
+# -----------------------------
 # FETCH INVIGILATORS
-# ---------------------------
-def get_invigilators():
+# -----------------------------
+def fetch_invigilators():
     cursor.execute("SELECT * FROM invigilators")
     return cursor.fetchall()
 
+# -----------------------------
+# FETCH EXAMS
+# -----------------------------
+def fetch_exams():
+    cursor.execute("""
+        SELECT DISTINCT exam_date, time_slot, stream 
+        FROM exam_timetable
+    """)
+    return cursor.fetchall()
 
-# ---------------------------
-# GENERATE SEATING
-# ---------------------------
-def generate_seating():
+# -----------------------------
+# FILTER STUDENTS BY STREAM
+# -----------------------------
+def filter_students_by_stream(students, stream):
+    if stream == "All" or stream == "Common":
+        return students
 
-    # Clear old data
+    stream_list = [s.strip() for s in stream.split("/")]
+
+    filtered = [
+        s for s in students
+        if any(branch in s['branch'] for branch in stream_list)
+    ]
+
+    return filtered
+
+# -----------------------------
+# ALTERNATE BRANCH DISTRIBUTION
+# -----------------------------
+def alternate_branch_distribution(students):
+    branch_groups = defaultdict(list)
+
+    for s in students:
+        branch_groups[s['branch']].append(s)
+
+    # Shuffle inside each branch
+    for b in branch_groups:
+        random.shuffle(branch_groups[b])
+
+    result = []
+
+    while any(branch_groups.values()):
+        for b in list(branch_groups.keys()):
+            if branch_groups[b]:
+                result.append(branch_groups[b].pop())
+
+    return result
+
+# -----------------------------
+# CLEAR OLD DATA (OPTIONAL)
+# -----------------------------
+def clear_old_data():
     cursor.execute("DELETE FROM seating_arrangement")
     cursor.execute("DELETE FROM resource_allocation")
-    db.commit()
+    conn.commit()
 
-    # Fetch data
-    students = get_all_students()
-    rooms = get_rooms()
-    invigilators = get_invigilators()
+# -----------------------------
+# GENERATE SEATING
+# -----------------------------
+def generate_seating():
+    all_students = fetch_all_students()
+    rooms = fetch_rooms()
+    exams = fetch_exams()
+    invigilators = fetch_invigilators()
 
-    # Shuffle students & invigilators
-    random.shuffle(students)
-    random.shuffle(invigilators)
+    used_invigilators = set()
 
-    student_index = 0
-    invigilator_index = 0
+    for exam in exams:
+        exam_date = exam['exam_date']
+        time_slot = exam['time_slot']
+        stream = exam['stream']
 
-    # Assign students to rooms
-    for room in rooms:
-        room_no = room['room_number']
-        capacity = room['capacity']
+        print(f"Processing {exam_date} | {time_slot} | {stream}")
 
-        # Assign invigilator to room
-        if invigilator_index < len(invigilators):
-            inv = invigilators[invigilator_index]
+        # Filter students for this exam
+        students = filter_students_by_stream(all_students, stream)
+
+        # Unique shuffle per exam
+        random.shuffle(students)
+
+        # Alternate branches
+        arranged_students = alternate_branch_distribution(students)
+
+        seat_index = 0
+
+        # -----------------------------
+        # SEAT ALLOCATION
+        # -----------------------------
+        for room in rooms:
+            room_no = room['room_number']
+            capacity = room['capacity']
+
+            for seat in range(1, capacity + 1):
+                if seat_index >= len(arranged_students):
+                    break
+
+                s = arranged_students[seat_index]
+
+                cursor.execute("""
+                    INSERT INTO seating_arrangement
+                    (admission_id, name, branch, section, room_number, seat_number, exam_date, time_slot)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                """, (
+                    s['admission_id'],
+                    s['name'],
+                    s['branch'],
+                    s['section'],
+                    room_no,
+                    seat,
+                    exam_date,
+                    time_slot
+                ))
+
+                seat_index += 1
+
+        # -----------------------------
+        # INVIGILATOR ASSIGNMENT
+        # -----------------------------
+        random.shuffle(invigilators)
+
+        for i, room in enumerate(rooms):
+            inv = invigilators[i % len(invigilators)]
+
+            # Avoid same invigilator reuse in same exam
+            key = (inv['registration_id'], exam_date, time_slot)
+
+            if key in used_invigilators:
+                continue
+
+            used_invigilators.add(key)
 
             cursor.execute("""
-                INSERT INTO resource_allocation (registration_id, name, room_number)
-                VALUES (%s, %s, %s)
-            """, (inv['registration_id'], inv['name'], room_no))
-
-            invigilator_index += 1
-
-        # Fill students
-        for seat in range(1, capacity + 1):
-            if student_index >= len(students):
-                break
-
-            s = students[student_index]
-
-            cursor.execute("""
-                INSERT INTO seating_arrangement 
-                (admission_id, name, branch, section, room_number, seat_number)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO resource_allocation
+                (registration_id, name, room_number, exam_date, time_slot)
+                VALUES (%s,%s,%s,%s,%s)
             """, (
-                s['admission_id'],
-                s['name'],
-                s['branch'],
-                s['section'],
-                room_no,
-                seat
+                inv['registration_id'],
+                inv['name'],
+                room['room_number'],
+                exam_date,
+                time_slot
             ))
 
-            student_index += 1
+        conn.commit()
 
-    db.commit()
-    print("✅ Seating and invigilator allocation completed!")
-
-
-# ---------------------------
-# VIEW RESULTS
-# ---------------------------
-def view_seating():
-    cursor.execute("SELECT * FROM seating_arrangement")
-    data = cursor.fetchall()
-
-    for row in data[:20]:   # print first 20
-        print(row)
-
-
-def view_invigilators():
-    cursor.execute("SELECT * FROM resource_allocation")
-    data = cursor.fetchall()
-
-    for row in data:
-        print(row)
-
-
-# ---------------------------
-# RUN PROGRAM
-# ---------------------------
+# -----------------------------
+# MAIN EXECUTION
+# -----------------------------
 if __name__ == "__main__":
+    clear_old_data()  # optional
     generate_seating()
-    
-    print("\n--- SAMPLE SEATING ---")
-    view_seating()
-    
-    print("\n--- INVIGILATOR ALLOCATION ---")
-    view_invigilators()
+    print("\n✅ Seating & Invigilation Generated Successfully!")
