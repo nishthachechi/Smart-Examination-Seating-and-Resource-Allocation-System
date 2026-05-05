@@ -135,7 +135,7 @@
 
   const adminTeacherRows = [
     {
-      teacherId: "TCH101",
+      teacherId: "TCH2200101",
       name: "Dr. Meera Joshi",
       department: "Computer Science",
       phone: "98765 22110",
@@ -144,7 +144,7 @@
       session: "Morning",
     },
     {
-      teacherId: "TCH102",
+      teacherId: "TCH2200102",
       name: "Prof. Kiran Bhat",
       department: "Computer Science",
       phone: "98450 12231",
@@ -153,7 +153,7 @@
       session: "Morning",
     },
     {
-      teacherId: "TCH118",
+      teacherId: "TCH2200118",
       name: "Dr. Suma Prakash",
       department: "Information Science",
       phone: "97311 45902",
@@ -162,7 +162,7 @@
       session: "Afternoon",
     },
     {
-      teacherId: "TCH121",
+      teacherId: "TCH2200121",
       name: "Prof. Harish Gowda",
       department: "Information Science",
       phone: "98861 34120",
@@ -171,7 +171,7 @@
       session: "Afternoon",
     },
     {
-      teacherId: "TCH134",
+      teacherId: "TCH2200134",
       name: "Dr. Kavya Ramesh",
       department: "Electronics",
       phone: "97420 65310",
@@ -180,7 +180,7 @@
       session: "Morning",
     },
     {
-      teacherId: "TCH145",
+      teacherId: "TCH2200145",
       name: "Prof. Nitin Rao",
       department: "Mechanical",
       phone: "99807 22214",
@@ -189,7 +189,7 @@
       session: "Morning",
     },
     {
-      teacherId: "TCH152",
+      teacherId: "TCH2200152",
       name: "Dr. Shweta Menon",
       department: "Civil",
       phone: "97911 80550",
@@ -198,7 +198,7 @@
       session: "Morning",
     },
     {
-      teacherId: "TCH164",
+      teacherId: "TCH2200164",
       name: "Prof. Rahul Desai",
       department: "Electrical",
       phone: "98458 90314",
@@ -209,8 +209,8 @@
   ];
 
   const teacherProfiles = {
-    TCH101: {
-      teacherId: "TCH101",
+    TCH2200101: {
+      teacherId: "TCH2200101",
       password: "teacher123",
       name: "Dr. Meera Joshi",
       department: "Computer Science",
@@ -238,8 +238,8 @@
         },
       ],
     },
-    TCH118: {
-      teacherId: "TCH118",
+    TCH2200118: {
+      teacherId: "TCH2200118",
       password: "teacher123",
       name: "Dr. Suma Prakash",
       department: "Information Science",
@@ -450,6 +450,12 @@
 
   const pageName = window.location.pathname.split("/").pop() || "login.html";
 
+  const DEFAULT_PASSWORDS = {
+    student: "student123",
+    teacher: "teacher123",
+    admin: "admin123",
+  };
+
   function getSession() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_KEYS.session) || "null");
@@ -554,6 +560,38 @@
     return value.trim().toUpperCase();
   }
 
+  function isValidUserId(value) {
+    return /^[A-Z0-9]{10}$/.test(normalizeIdentifier(value));
+  }
+
+  function getStudentProfile(identifier) {
+    const normalized = normalizeIdentifier(identifier);
+
+    return (
+      studentProfiles[normalized] || {
+        usn: normalized,
+        password: DEFAULT_PASSWORDS.student,
+        name: "Student User",
+        department: "Computer Science",
+        exams: studentProfiles["1RV22IS019"].exams,
+      }
+    );
+  }
+
+  function getTeacherProfile(identifier) {
+    const normalized = normalizeIdentifier(identifier);
+
+    return (
+      teacherProfiles[normalized] || {
+        teacherId: normalized,
+        password: DEFAULT_PASSWORDS.teacher,
+        name: "Faculty User",
+        department: "Computer Science",
+        duties: teacherProfiles["TCH2200101"].duties,
+      }
+    );
+  }
+
   function showLoginMessage(message, tone) {
     const messageBox = document.getElementById("login-message");
 
@@ -567,28 +605,27 @@
   }
 
   function findAdminUser(identifier, password) {
-    const normalized = identifier.trim().toLowerCase();
-    const isMatch =
-      (normalized === "admin" || normalized === "admin001") &&
-      password === "admin123";
+    const normalized = normalizeIdentifier(identifier);
 
-    if (!isMatch) {
+    if (!isValidUserId(normalized) || password !== DEFAULT_PASSWORDS.admin) {
       return null;
     }
 
     return {
       role: "admin",
-      id: "ADMIN001",
+      id: normalized,
       name: "Exam Cell Admin",
     };
   }
 
   function findStudentUser(identifier, password) {
-    const profile = studentProfiles[normalizeIdentifier(identifier)];
+    const normalized = normalizeIdentifier(identifier);
 
-    if (!profile || profile.password !== password) {
+    if (!isValidUserId(normalized) || password !== DEFAULT_PASSWORDS.student) {
       return null;
     }
+
+    const profile = getStudentProfile(normalized);
 
     return {
       role: "student",
@@ -598,11 +635,13 @@
   }
 
   function findTeacherUser(identifier, password) {
-    const profile = teacherProfiles[normalizeIdentifier(identifier)];
+    const normalized = normalizeIdentifier(identifier);
 
-    if (!profile || profile.password !== password) {
+    if (!isValidUserId(normalized) || password !== DEFAULT_PASSWORDS.teacher) {
       return null;
     }
+
+    const profile = getTeacherProfile(normalized);
 
     return {
       role: "teacher",
@@ -614,7 +653,7 @@
   function inferRole(identifier) {
     const normalized = normalizeIdentifier(identifier);
 
-    if (normalized === "ADMIN" || normalized === "ADMIN001") {
+    if (normalized.startsWith("ADM")) {
       return { role: "admin", target: "index.html" };
     }
 
@@ -633,6 +672,14 @@
 
     if (!identifier || !password) {
       showLoginMessage("Enter both the user ID and password before logging in.", "error");
+      return;
+    }
+
+    if (!isValidUserId(identifier)) {
+      showLoginMessage(
+        "User ID must be exactly 10 characters and contain only letters and numbers.",
+        "error"
+      );
       return;
     }
 
@@ -696,14 +743,7 @@
       return;
     }
 
-    const profile = studentProfiles[session.id];
-
-    if (!profile) {
-      clearSession();
-      setFlash("Student record not found. Please log in again.", "error");
-      window.location.replace("login.html");
-      return;
-    }
+    const profile = getStudentProfile(session.id);
 
     setText("student-name", profile.name);
     setText("student-usn", profile.usn);
@@ -738,14 +778,7 @@
       return;
     }
 
-    const profile = teacherProfiles[session.id];
-
-    if (!profile) {
-      clearSession();
-      setFlash("Teacher record not found. Please log in again.", "error");
-      window.location.replace("login.html");
-      return;
-    }
+    const profile = getTeacherProfile(session.id);
 
     setText("teacher-name", profile.name);
     setText("teacher-id", profile.teacherId);
@@ -988,4 +1021,3 @@
 
   initPage();
 })();
-
