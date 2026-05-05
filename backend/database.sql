@@ -497,12 +497,12 @@ CREATE TABLE seating_arrangement (
     UNIQUE (exam_date, time_slot, room_number, seat_number),
 
     -- Prevent same student getting multiple seats in same exam
-    UNIQUE (exam_date, time_slot, admission_id)
-);
+    UNIQUE (exam_date, time_slot, admission_id));
 
 -- -----------------------------
 -- INVIGILATOR TABLE
 -- -----------------------------
+
 CREATE TABLE resource_allocation (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -518,8 +518,7 @@ CREATE TABLE resource_allocation (
     UNIQUE (exam_date, time_slot, room_number),
 
     -- Same invigilator can't be in two rooms at same time
-    UNIQUE (exam_date, time_slot, registration_id)
-);
+    UNIQUE (exam_date, time_slot, registration_id));
 
 -- -----------------------------
 -- CLEAR OLD DATA BEFORE RUN
