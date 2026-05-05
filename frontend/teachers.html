@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teacher Dashboard | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -20,7 +21,7 @@
         </p>
 
         <nav class="nav-links">
-          <a href="login.html">
+          <a href="login.html" data-logout="true">
             Login Portal
             <small>Choose student, teacher, or admin login</small>
           </a>
@@ -54,21 +55,21 @@
               table with exam date and room capacity.
             </p>
           </div>
-          <a class="primary-button" href="login.html">Back to Login</a>
+          <a class="primary-button" href="login.html" data-logout="true">Back to Login</a>
         </header>
 
         <section class="summary-grid">
           <article class="summary-card teal">
             <p>Teacher Name</p>
-            <h2>Dr. Meera Joshi</h2>
+            <h2 id="teacher-name">Dr. Meera Joshi</h2>
           </article>
           <article class="summary-card gold">
             <p>USN / Staff ID</p>
-            <h2>TCH101</h2>
+            <h2 id="teacher-id">TCH101</h2>
           </article>
           <article class="summary-card dark">
             <p>Department</p>
-            <h2>Computer Science</h2>
+            <h2 id="teacher-department">Computer Science</h2>
           </article>
         </section>
 
@@ -78,7 +79,7 @@
               <h2>Room Allotment Table</h2>
               <p>Teacher invigilation rooms with date and room capacity.</p>
             </div>
-            <span class="panel-pill">3 Assigned Duties</span>
+            <span class="panel-pill" id="teacher-duty-count">0 Assigned Duties</span>
           </div>
 
           <div class="table-wrap">
@@ -92,29 +93,7 @@
                   <th>Session</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>22CS61</td>
-                  <td>A-201</td>
-                  <td>24 Apr 2026</td>
-                  <td>60</td>
-                  <td>Morning</td>
-                </tr>
-                <tr>
-                  <td>22CS63</td>
-                  <td>B-204</td>
-                  <td>29 Apr 2026</td>
-                  <td>54</td>
-                  <td>Afternoon</td>
-                </tr>
-                <tr>
-                  <td>22CS64</td>
-                  <td>C-302</td>
-                  <td>02 May 2026</td>
-                  <td>56</td>
-                  <td>Morning</td>
-                </tr>
-              </tbody>
+              <tbody id="teacher-duty-body"></tbody>
             </table>
           </div>
         </section>
@@ -127,3 +106,5 @@
     </div>
   </body>
 </html>
+
+
