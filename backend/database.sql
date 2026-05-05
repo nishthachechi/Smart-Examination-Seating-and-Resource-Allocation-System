@@ -341,7 +341,116 @@ INSERT INTO rooms (room_number, capacity) VALUES
 (106, 40),
 (107, 40);
 
-SELECT * FROM rooms;
+SELECT * FROM rooms; 
+
+CREATE TABLE exam_timetable (
+    exam_date DATE,
+    day VARCHAR(20),
+    time_slot VARCHAR(30),
+    subject VARCHAR(255),
+    stream VARCHAR(100),
+    subject_code VARCHAR(20)
+);
+
+INSERT INTO exam_timetable (exam_date, day, time_slot, subject, stream, subject_code) VALUES
+
+-- 13 April 2026 (Monday)
+('2026-04-13', 'Monday', '9:30-11:00', 'Numerical Methods', 'CSE', 'BAMCS201'),
+('2026-04-13', 'Monday', '9:30-11:00', 'Calculus Laplace Transform & Numerical Techniques', 'EEE & ECE', 'BAMEE201'),
+('2026-04-13', 'Monday', '9:30-11:00', 'Differential Calculus & Numerical Methods', 'CV', 'BAMCV201'),
+
+('2026-04-13', 'Monday', '2:30-4:00', 'Samskrutika / Balake Kannada', 'CSE/EEE/CV', 'BSKHD209'),
+
+('2026-04-13', 'Monday', '9:30-11:00', 'Applied Chemistry for Smart Systems', 'CSE', 'BACCS202'),
+('2026-04-13', 'Monday', '9:30-11:00', 'Applied Chemistry for Emerging Electronics', 'EEE/ECE', 'BACEE202'),
+('2026-04-13', 'Monday', '9:30-11:00', 'Applied Chemistry for Adv. Metal Protection', 'ME', 'BACME202'),
+
+('2026-04-13', 'Monday', '2:30-4:00', 'Communication Skills', 'CSE/ECE/EEE/ME', 'BEGHD206'),
+
+-- 15 April 2026 (Wednesday)
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Quantum Physics & Applications', 'CS', 'BAPCS202'),
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Physics of Electrical & Electronic Materials', 'EEE', 'BAPEE202'),
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Physics for Sustainable Structural Systems', 'CV', 'BAPCV202'),
+
+('2026-04-15', 'Wednesday', '2:30-4:00', 'Introduction to AI & Applications', 'ETC', 'BAIAP205'),
+
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Numerical Methods', 'CSE', 'BAMCS201'),
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Calculus Laplace Transform & Numerical Techniques', 'ECE', 'BAMEE201'),
+('2026-04-15', 'Wednesday', '9:30-11:00', 'Multivariable Calculus & Numerical Methods', 'ME', 'BAMME201'),
+
+('2026-04-15', 'Wednesday', '2:30-4:00', 'Indian Constitution & Engineering Ethics', 'All', 'BICHD207'),
+
+-- 16 April 2026 (Thursday)
+('2026-04-16', 'Thursday', '9:30-11:00', 'Programming in C', 'CSE', 'BCSEN203'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Basics of Electrical Engineering', 'EEE', 'BEEEN203'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Engineering Mechanics', 'CV', 'BCVEN203'),
+
+('2026-04-16', 'Thursday', '9:30-11:00', 'Building Sciences & Mechanics', 'Common', 'BENSC204A'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Introduction to Electrical Engineering', 'Common', 'BENSC204B'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Introduction to Electronics & Communication', 'Common', 'BENSC204C'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Introduction to Mechanical Engineering', 'Common', 'BENSC204D'),
+('2026-04-16', 'Thursday', '9:30-11:00', 'Essentials of Information Technology', 'Common', 'BENSC204E'),
+
+-- 17 April 2026 (Friday)
+('2026-04-17', 'Friday', '9:30-11:00', 'Building Sciences & Mechanics', 'Common', 'BENSC204A'),
+('2026-04-17', 'Friday', '9:30-11:00', 'Intro to Electrical Engineering', 'Common', 'BENSC204B'),
+('2026-04-17', 'Friday', '9:30-11:00', 'Intro to Electronics & Communication', 'Common', 'BENSC204C'),
+('2026-04-17', 'Friday', '9:30-11:00', 'Intro to Mechanical Engineering', 'Common', 'BENSC204D'),
+('2026-04-17', 'Friday', '9:30-11:00', 'Essentials of IT', 'Common', 'BENSC204E'),
+
+('2026-04-17', 'Friday', '9:30-11:00', 'Introduction to C Programming', 'Common', 'BPRLC205A'),
+('2026-04-17', 'Friday', '9:30-11:00', 'Python Programming', 'Common', 'BPRLC205B');
+
+CREATE TABLE room_seats 
+ (
+    room_number INT,
+    seat_number INT,
+    PRIMARY KEY (room_number, seat_number)
+);
+
+INSERT INTO room_seats (room_number, seat_number) VALUES
+
+-- Room 101
+(101,1),(101,2),(101,3),(101,4),(101,5),(101,6),(101,7),(101,8),(101,9),(101,10),
+(101,11),(101,12),(101,13),(101,14),(101,15),(101,16),(101,17),(101,18),(101,19),(101,20),
+(101,21),(101,22),(101,23),(101,24),(101,25),(101,26),(101,27),(101,28),(101,29),(101,30),
+(101,31),(101,32),(101,33),(101,34),(101,35),(101,36),(101,37),(101,38),(101,39),(101,40),
+
+-- Room 102
+(102,1),(102,2),(102,3),(102,4),(102,5),(102,6),(102,7),(102,8),(102,9),(102,10),
+(102,11),(102,12),(102,13),(102,14),(102,15),(102,16),(102,17),(102,18),(102,19),(102,20),
+(102,21),(102,22),(102,23),(102,24),(102,25),(102,26),(102,27),(102,28),(102,29),(102,30),
+(102,31),(102,32),(102,33),(102,34),(102,35),(102,36),(102,37),(102,38),(102,39),(102,40),
+
+-- Room 103
+(103,1),(103,2),(103,3),(103,4),(103,5),(103,6),(103,7),(103,8),(103,9),(103,10),
+(103,11),(103,12),(103,13),(103,14),(103,15),(103,16),(103,17),(103,18),(103,19),(103,20),
+(103,21),(103,22),(103,23),(103,24),(103,25),(103,26),(103,27),(103,28),(103,29),(103,30),
+(103,31),(103,32),(103,33),(103,34),(103,35),(103,36),(103,37),(103,38),(103,39),(103,40),
+
+-- Room 104
+(104,1),(104,2),(104,3),(104,4),(104,5),(104,6),(104,7),(104,8),(104,9),(104,10),
+(104,11),(104,12),(104,13),(104,14),(104,15),(104,16),(104,17),(104,18),(104,19),(104,20),
+(104,21),(104,22),(104,23),(104,24),(104,25),(104,26),(104,27),(104,28),(104,29),(104,30),
+(104,31),(104,32),(104,33),(104,34),(104,35),(104,36),(104,37),(104,38),(104,39),(104,40),
+
+-- Room 105
+(105,1),(105,2),(105,3),(105,4),(105,5),(105,6),(105,7),(105,8),(105,9),(105,10),
+(105,11),(105,12),(105,13),(105,14),(105,15),(105,16),(105,17),(105,18),(105,19),(105,20),
+(105,21),(105,22),(105,23),(105,24),(105,25),(105,26),(105,27),(105,28),(105,29),(105,30),
+(105,31),(105,32),(105,33),(105,34),(105,35),(105,36),(105,37),(105,38),(105,39),(105,40),
+
+-- Room 106
+(106,1),(106,2),(106,3),(106,4),(106,5),(106,6),(106,7),(106,8),(106,9),(106,10),
+(106,11),(106,12),(106,13),(106,14),(106,15),(106,16),(106,17),(106,18),(106,19),(106,20),
+(106,21),(106,22),(106,23),(106,24),(106,25),(106,26),(106,27),(106,28),(106,29),(106,30),
+(106,31),(106,32),(106,33),(106,34),(106,35),(106,36),(106,37),(106,38),(106,39),(106,40),
+
+-- Room 107
+(107,1),(107,2),(107,3),(107,4),(107,5),(107,6),(107,7),(107,8),(107,9),(107,10),
+(107,11),(107,12),(107,13),(107,14),(107,15),(107,16),(107,17),(107,18),(107,19),(107,20),
+(107,21),(107,22),(107,23),(107,24),(107,25),(107,26),(107,27),(107,28),(107,29),(107,30),
+(107,31),(107,32),(107,33),(107,34),(107,35),(107,36),(107,37),(107,38),(107,39),(107,40);
 
 CREATE TABLE invigilators 
 (registration_id VARCHAR(10), name VARCHAR(20), department VARCHAR(20));
