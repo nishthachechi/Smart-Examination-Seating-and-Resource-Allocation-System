@@ -1,10 +1,11 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Classrooms | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -40,7 +41,7 @@
             Generate Seating Plan
             <small>Final room-wise exam arrangement</small>
           </a>
-          <a class="logout-link" href="login.html">
+          <a class="logout-link" href="login.html" data-logout="true">
             Logout
             <small>Return to main login page</small>
           </a>
@@ -71,7 +72,7 @@
               <h2>Available Classrooms</h2>
               <p>Capacity and availability status for each exam hall.</p>
             </div>
-            <span class="panel-pill">24 Active Rooms</span>
+            <span class="panel-pill" id="admin-classroom-count">0 Active Rooms</span>
           </div>
 
           <div class="table-wrap">
@@ -87,80 +88,7 @@
                   <th>Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>A-201</td>
-                  <td>Academic Block A</td>
-                  <td>2</td>
-                  <td>60</td>
-                  <td>Yes</td>
-                  <td>24 Apr 2026</td>
-                  <td><span class="status confirmed">Allocated</span></td>
-                </tr>
-                <tr>
-                  <td>A-202</td>
-                  <td>Academic Block A</td>
-                  <td>2</td>
-                  <td>60</td>
-                  <td>Yes</td>
-                  <td>24 Apr 2026</td>
-                  <td><span class="status confirmed">Allocated</span></td>
-                </tr>
-                <tr>
-                  <td>B-104</td>
-                  <td>Science Block B</td>
-                  <td>1</td>
-                  <td>54</td>
-                  <td>No</td>
-                  <td>25 Apr 2026</td>
-                  <td><span class="status confirmed">Allocated</span></td>
-                </tr>
-                <tr>
-                  <td>B-105</td>
-                  <td>Science Block B</td>
-                  <td>1</td>
-                  <td>54</td>
-                  <td>No</td>
-                  <td>25 Apr 2026</td>
-                  <td><span class="status confirmed">Allocated</span></td>
-                </tr>
-                <tr>
-                  <td>C-301</td>
-                  <td>Electronics Block C</td>
-                  <td>3</td>
-                  <td>60</td>
-                  <td>Yes</td>
-                  <td>26 Apr 2026</td>
-                  <td><span class="status active">Reserved</span></td>
-                </tr>
-                <tr>
-                  <td>D-102</td>
-                  <td>Main Block D</td>
-                  <td>1</td>
-                  <td>48</td>
-                  <td>No</td>
-                  <td>27 Apr 2026</td>
-                  <td><span class="status active">Reserved</span></td>
-                </tr>
-                <tr>
-                  <td>D-104</td>
-                  <td>Main Block D</td>
-                  <td>1</td>
-                  <td>48</td>
-                  <td>No</td>
-                  <td>27 Apr 2026</td>
-                  <td><span class="status ready">Ready</span></td>
-                </tr>
-                <tr>
-                  <td>C-204</td>
-                  <td>Electronics Block C</td>
-                  <td>2</td>
-                  <td>56</td>
-                  <td>Yes</td>
-                  <td>28 Apr 2026</td>
-                  <td><span class="status ready">Ready</span></td>
-                </tr>
-              </tbody>
+              <tbody id="admin-classrooms-body"></tbody>
             </table>
           </div>
         </section>
@@ -172,4 +100,6 @@
       </main>
     </div>
   </body>
-</html>  
+</html>
+ 
+ 
