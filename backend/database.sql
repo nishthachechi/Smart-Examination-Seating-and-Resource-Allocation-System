@@ -476,10 +476,45 @@ INSERT INTO invigilators VALUES
 
 SELECT * FROM invigilators;
 
+CREATE TABLE seating_arrangement (
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
+    exam_date DATE,
+    time_slot VARCHAR(30),
 
+    room_number INT,
+    seat_number INT,
 
+    admission_id VARCHAR(10),
+    name VARCHAR(20),
+    branch VARCHAR(20),
+    section VARCHAR(10),
 
+    -- Prevent same seat being used twice in same exam
+    UNIQUE (exam_date, time_slot, room_number, seat_number),
 
+    -- Prevent same student getting multiple seats in same exam
+    UNIQUE (exam_date, time_slot, admission_id)
+
+CREATE TABLE resource_allocation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    exam_date DATE,
+    time_slot VARCHAR(30),
+
+    room_number INT,
+
+    registration_id VARCHAR(10),
+    name VARCHAR(20),
+
+    -- One invigilator per room per exam
+    UNIQUE (exam_date, time_slot, room_number),
+
+    -- Same invigilator can't be in two rooms at same time
+    UNIQUE (exam_date, time_slot, registration_id)
+);
+
+TRUNCATE seating_arrangement;
+TRUNCATE resource_allocation;
 
 
