@@ -44,13 +44,23 @@ def fetch_invigilators():
     return cursor.fetchall()
 
 # -----------------------------
+# CLEAR OLD DATA
+# -----------------------------
+def clear_old():
+    cursor.execute("DELETE FROM seating_arrangement")
+    cursor.execute("DELETE FROM resource_allocation")
+    conn.commit()
+
+# -----------------------------
 # STREAM FILTER
 # -----------------------------
 def filter_students(students, stream):
     if not stream:
         return []
 
-    if stream.lower() in ["all", "common"]:
+    stream = stream.strip().lower()
+
+    if stream in ["all", "common"]:
         return students
 
     stream = stream.replace("&", "/")
@@ -59,7 +69,7 @@ def filter_students(students, stream):
     return [s for s in students if s['branch'].upper() in branches]
 
 # -----------------------------
-# ALTERNATE BRANCHES
+# ALTERNATE BRANCH SEATING
 # -----------------------------
 def alternate(students):
     groups = defaultdict(list)
@@ -73,25 +83,17 @@ def alternate(students):
     result = []
 
     while any(groups.values()):
-        for k in list(groups.keys()):
-            if groups[k]:
-                result.append(groups[k].pop())
+        for branch in list(groups.keys()):
+            if groups[branch]:
+                result.append(groups[branch].pop())
 
     return result
 
 # -----------------------------
-# CLEAR OLD DATA (IMPORTANT)
-# -----------------------------
-def clear_tables():
-    cursor.execute("DELETE FROM seating_arrangement")
-    cursor.execute("DELETE FROM resource_allocation")
-    conn.commit()
-
-# -----------------------------
-# MAIN GENERATOR
+# MAIN LOGIC
 # -----------------------------
 def generate():
-    clear_tables()
+    clear_old()
 
     all_students = fetch_all_students()
     rooms = fetch_rooms()
@@ -103,12 +105,12 @@ def generate():
         slot = exam['time_slot']
         stream = exam['stream']
 
-        print(f"Processing {date} | {slot} | {stream}")
+        print(f"\nProcessing: {date} | {slot} | {stream}")
 
         students = filter_students(all_students, stream)
 
         if not students:
-            print("⚠ No students for this stream")
+            print("⚠ No students found")
             continue
 
         random.shuffle(students)
@@ -143,22 +145,22 @@ def generate():
                         date,
                         slot
                     ))
-                except:
-                    pass
+                except Exception as e:
+                    print("Seat insert error:", e)
 
                 idx += 1
 
+            if idx >= len(arranged):
+                break   # <-- FIXED outer break
+
         # -------------------------
-        # INVIGILATOR ASSIGNMENT
+        # INVIGILATORS
         # -------------------------
         random.shuffle(invigilators)
         inv_index = 0
 
         for room in rooms:
-            if inv_index >= len(invigilators):
-                inv_index = 0  # reuse if needed
-
-            inv = invigilators[inv_index]
+            inv = invigilators[inv_index % len(invigilators)]
 
             try:
                 cursor.execute("""
@@ -172,8 +174,8 @@ def generate():
                     date,
                     slot
                 ))
-            except:
-                pass
+            except Exception as e:
+                print("Invigilator error:", e)
 
             inv_index += 1
 
@@ -183,4 +185,4 @@ def generate():
 # RUN
 # -----------------------------
 generate()
-print("✅ Seating & Invigilation Generated Successfully!")
+print("\n✅ Seating & Invigilation Generated Successfully!")
