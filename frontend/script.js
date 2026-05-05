@@ -83,4 +83,7 @@ async function initDynamicTable(endpoint) {
         */
         console.log(`Dynamic table logic ready for ${endpoint}. Connect backend to overwrite static HTML rows.`);
     } catch (error) {
-        console.error(
+        console.error(`Error loading data for ${endpoint}:`, error);
+        // Leaves your hardcoded HTML table intact if the backend isn't running yet
+    }
+}
