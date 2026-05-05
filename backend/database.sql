@@ -401,6 +401,7 @@ INSERT INTO exam_timetable (exam_date, day, time_slot, subject, stream, subject_
 ('2026-04-17', 'Friday', '9:30-11:00', 'Introduction to C Programming', 'Common', 'BPRLC205A'),
 ('2026-04-17', 'Friday', '9:30-11:00', 'Python Programming', 'Common', 'BPRLC205B');
 
+SELECT * FROM exam_timetable;
 CREATE TABLE room_seats 
  (
     room_number INT,
@@ -450,7 +451,9 @@ INSERT INTO room_seats (room_number, seat_number) VALUES
 (107,1),(107,2),(107,3),(107,4),(107,5),(107,6),(107,7),(107,8),(107,9),(107,10),
 (107,11),(107,12),(107,13),(107,14),(107,15),(107,16),(107,17),(107,18),(107,19),(107,20),
 (107,21),(107,22),(107,23),(107,24),(107,25),(107,26),(107,27),(107,28),(107,29),(107,30),
-(107,31),(107,32),(107,33),(107,34),(107,35),(107,36),(107,37),(107,38),(107,39),(107,40);
+(107,31),(107,32),(107,33),(107,34),(107,35),(107,36),(107,37),(107,38),(107,39),(107,40));
+
+SELECT * FROM room_seats;
 
 CREATE TABLE invigilators 
 (registration_id VARCHAR(10), name VARCHAR(20), department VARCHAR(20));
