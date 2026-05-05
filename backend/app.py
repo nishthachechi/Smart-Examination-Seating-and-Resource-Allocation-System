@@ -31,8 +31,8 @@ def fetch_rooms():
 
 def fetch_exams():
     cursor.execute("""
-        SELECT DISTINCT exam_date, time_slot, stream 
-        FROM exam_timetable
+       SELECT DISTINCT exam_date, time_slot, stream, subject_code
+    FROM exam_timetable
     """)
     return cursor.fetchall()
 
