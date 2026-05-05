@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Portal | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body class="login-page">
     <div class="login-layout">
@@ -43,7 +44,7 @@
           options.
         </p>
 
-        <form class="login-form">
+        <form class="login-form" id="login-form">
           <div class="input-group">
             <label for="usn">USN</label>
             <input
@@ -63,18 +64,46 @@
               placeholder="Enter password"
             />
           </div>
+
+          <button type="submit" hidden aria-hidden="true"></button>
         </form>
 
+        <p class="form-message" id="login-message" hidden></p>
+
         <div class="role-grid">
-          <a class="primary-button role-button" href="student-dashboard.html">
+          <a
+            class="primary-button role-button"
+            href="student-dashboard.html"
+            data-login-role="student"
+            data-target="student-dashboard.html"
+          >
             Login as Student
           </a>
-          <a class="secondary-button role-button" href="teachers.html">
+          <a
+            class="secondary-button role-button"
+            href="teachers.html"
+            data-login-role="teacher"
+            data-target="teachers.html"
+          >
             Login as Teacher
           </a>
-          <a class="admin-button role-button" href="index.html">
+          <a
+            class="admin-button role-button"
+            href="index.html"
+            data-login-role="admin"
+            data-target="index.html"
+          >
             Login as Admin
           </a>
+        </div>
+
+        <div class="credential-card">
+          <p class="credential-title">Sample Credentials</p>
+          <div class="credential-list">
+            <p><strong>Student:</strong> <code>1RV22IS019 / student123</code></p>
+            <p><strong>Teacher:</strong> <code>TCH101 / teacher123</code></p>
+            <p><strong>Admin:</strong> <code>admin / admin123</code></p>
+          </div>
         </div>
 
         <p class="login-note">
@@ -85,3 +114,5 @@
     </div>
   </body>
 </html>
+
+
