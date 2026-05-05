@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | Exam Room Allocation</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <div class="shell">
@@ -40,7 +41,7 @@
             Generate Seating Plan
             <small>Final room-wise exam arrangement</small>
           </a>
-          <a class="logout-link" href="login.html">
+          <a class="logout-link" href="login.html" data-logout="true">
             Logout
             <small>Return to main login page</small>
           </a>
@@ -70,23 +71,23 @@
         <section class="metrics">
           <article class="metric-card teal">
             <p>Total Students</p>
-            <h2>720</h2>
+            <h2 id="metric-total-students">0</h2>
             <strong>Across all departments</strong>
           </article>
           <article class="metric-card gold">
             <p>Invigilators Assigned</p>
-            <h2>48</h2>
+            <h2 id="metric-total-teachers">0</h2>
             <strong>Morning and afternoon sessions</strong>
           </article>
           <article class="metric-card rose">
             <p>Available Classrooms</p>
-            <h2>24</h2>
+            <h2 id="metric-total-classrooms">0</h2>
             <strong>Capacity verified and active</strong>
           </article>
           <article class="metric-card dark">
             <p>Plans Generated</p>
-            <h2>12</h2>
-            <strong>Latest update: 22 Apr 2026</strong>
+            <h2 id="metric-total-plans">0</h2>
+            <strong id="metric-plan-update">Latest update: 22 Apr 2026</strong>
           </article>
         </section>
 
@@ -98,3 +99,78 @@
             </div>
             <span class="panel-pill">4 Admin Modules</span>
           </div>
+
+          <div class="link-grid">
+            <a class="link-card" href="students.html">
+              <span class="link-tag">Records</span>
+              <h3>Student List</h3>
+              <p>
+                View student name, USN, branch, exam date, and allotted room in
+                a structured table.
+              </p>
+            </a>
+
+            <a class="link-card" href="teacher-list.html">
+              <span class="link-tag">Faculty</span>
+              <h3>Teachers List</h3>
+              <p>
+                Check faculty details, invigilation rooms, and assigned exam
+                slots from one place.
+              </p>
+            </a>
+
+            <a class="link-card" href="classrooms.html">
+              <span class="link-tag">Rooms</span>
+              <h3>Classrooms</h3>
+              <p>
+                Review classroom numbers, floor, seating capacity, and
+                availability status before exams.
+              </p>
+            </a>
+
+            <a class="link-card" href="seating-plan.html">
+              <span class="link-tag">Allocation</span>
+              <h3>Generate Seating Plan</h3>
+              <p>
+                Open the room-wise seating arrangement page for the final exam
+                allocation table.
+              </p>
+            </a>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Upcoming Exam Snapshot</h2>
+              <p>Sample overview for the admin homepage.</p>
+            </div>
+            <a class="secondary-button" href="students.html">View Student Table</a>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Name</th>
+                  <th>Exam Date</th>
+                  <th>Session</th>
+                  <th>Rooms Used</th>
+                  <th>Students</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="admin-overview-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <p class="footer-note">
+          Frontend prototype for the exam room allocation system admin module.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
+
