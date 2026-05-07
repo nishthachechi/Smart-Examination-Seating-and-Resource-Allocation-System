@@ -44,19 +44,37 @@
           options.
         </p>
 
-        <form class="login-form" id="login-form">
-          <div class="input-group">
-            <label for="usn">USN</label>
-            <input
-              id="usn"
-              name="usn"
-              type="text"
-              placeholder="Enter 10-character ID"
-              maxlength="10"
-              minlength="10"
-              pattern="[A-Za-z0-9]{10}"
-              title="Enter exactly 10 letters or numbers"
-            />
+      <form class="login-form" method="POST" action="/login">
+
+  <div class="input-group">
+    <label for="usn">USN / Registration ID</label>
+
+    <input
+      id="usn"
+      name="usn"
+      type="text"
+      placeholder="Enter Admission ID"
+      required
+    />
+  </div>
+
+  <div class="input-group">
+    <label for="password">Password</label>
+
+    <input
+      id="password"
+      name="password"
+      type="password"
+      placeholder="Enter Password"
+      required
+    />
+  </div>
+
+  <button type="submit" class="primary-button">
+    Login
+  </button>
+
+</form>
           </div>
 
           <div class="input-group">
