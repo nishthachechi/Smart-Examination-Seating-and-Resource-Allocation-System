@@ -1,90 +1,60 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 from flask_cors import CORS
 import mysql.connector
 import random
 from collections import defaultdict
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here' # Required for sessions
 CORS(app)
 
 # -----------------------------
-# DB CONNECTION (UPDATE PASSWORD HERE!)
+# DB CONNECTION HELPER
 # -----------------------------
-# CHANGE "root123" TO YOUR ACTUAL MYSQL PASSWORD
-DB_PASSWORD = "root@123" 
-
-try:
-    conn = mysql.connector.connect(
+def get_db_connection():
+    return mysql.connector.connect(
         host="localhost",
         user="root",
-        password=DB_PASSWORD,
+        password="root@123", # Ensure this matches your actual password
         database="examination"
     )
-    cursor = conn.cursor(dictionary=True)
-except Exception as e:
-    print("❌ Database connection failed:", e)
-    exit()
 
 # -----------------------------
-# FETCH DATA
+# LOGIC FUNCTIONS
 # -----------------------------
-def fetch_all_students():
+
+def fetch_all_students(cursor):
     tables = [
-        "cse_students_a","me_students_a","ece_students_a",
-        "cse_ds_students_a","cse_cy_students_a",
-        "eee_students_a","cse_aiml_students_a"
+        "cse_students_a", "me_students_a", "ece_students_a",
+        "cse_ds_students_a", "cse_cy_students_a",
+        "eee_students_a", "cse_aiml_students_a"
     ]
     students = []
     for t in tables:
-        cursor.execute(f"SELECT * FROM {t}")
-        students.extend(cursor.fetchall())
+        try:
+            cursor.execute(f"SELECT * FROM {t}")
+            students.extend(cursor.fetchall())
+        except Exception as e:
+            print(f"⚠ Table {t} missing or error: {e}")
     return students
 
-def fetch_rooms():
-    cursor.execute("SELECT * FROM rooms ORDER BY room_number")
-    return cursor.fetchall()
-
-def fetch_exams():
-    cursor.execute("""
-        SELECT DISTINCT exam_date, time_slot, stream 
-        FROM exam_timetable
-    """)
-    return cursor.fetchall()
-
-def fetch_invigilators():
-    cursor.execute("SELECT * FROM invigilators")
-    return cursor.fetchall()
-
-# -----------------------------
-# CLEAR OLD DATA
-# -----------------------------
-def clear_old():
-    cursor.execute("DELETE FROM seating_arrangement")
-    cursor.execute("DELETE FROM resource_allocation")
-    conn.commit()
-
-# -----------------------------
-# STREAM FILTER
-# -----------------------------
 def filter_students(students, stream):
-    if not stream:
-        return []
+    if not stream: return []
     stream = stream.strip().lower()
-    if stream in ["all", "common"]:
-        return students
-    stream = stream.replace("&", "/")
-    branches = [s.strip().upper() for s in stream.split("/")]
+    if stream in ["all", "common"]: return students
+    
+    # Normalizing stream names for matching
+    branches = [s.strip().upper() for s in stream.replace("&", "/").split("/")]
     return [s for s in students if s['branch'].upper() in branches]
 
-# -----------------------------
-# ALTERNATE BRANCH SEATING
-# -----------------------------
-def alternate(students):
+def alternate_seating(students):
     groups = defaultdict(list)
     for s in students:
         groups[s['branch']].append(s)
+    
     for g in groups.values():
         random.shuffle(g)
+        
     result = []
     while any(groups.values()):
         for branch in list(groups.keys()):
@@ -92,158 +62,113 @@ def alternate(students):
                 result.append(groups[branch].pop())
     return result
 
-# -----------------------------
-# MAIN LOGIC
-# -----------------------------
-def generate():
+def generate_logic():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
     try:
-        clear_old()
-        all_students = fetch_all_students()
-        rooms = fetch_rooms()
-        exams = fetch_exams()
-        invigilators = fetch_invigilators()
+        # Clear old data
+        cursor.execute("DELETE FROM seating_arrangement")
+        cursor.execute("DELETE FROM resource_allocation")
+
+        all_students = fetch_all_students(cursor)
+        cursor.execute("SELECT * FROM rooms ORDER BY room_number")
+        rooms = cursor.fetchall()
+        cursor.execute("SELECT DISTINCT exam_date, time_slot, stream FROM exam_timetable")
+        exams = cursor.fetchall()
+        cursor.execute("SELECT * FROM invigilators")
+        invigilators = cursor.fetchall()
 
         total_seats = sum(room['capacity'] for room in rooms)
 
         for exam in exams:
-            date = exam['exam_date']
-            slot = exam['time_slot']
-            stream = exam['stream']
-
-            print(f"\n📌 Processing: {date} | {slot} | {stream}")
-
+            date, slot, stream = exam['exam_date'], exam['time_slot'], exam['stream']
             students = filter_students(all_students, stream)
 
-            if not students:
-                print("⚠ No students found")
-                continue
-
-            if len(students) > total_seats:
-                print("⚠ Warning: Not enough seats! Some students will not be assigned.")
+            if not students: continue
 
             random.shuffle(students)
-            arranged = alternate(students)
+            arranged = alternate_seating(students)
 
             idx = 0
-
-            # -------------------------
-            # SEATING
-            # -------------------------
             for room in rooms:
+                # Seating logic
                 for seat in range(1, room['capacity'] + 1):
-                    if idx >= len(arranged):
-                        break
-
+                    if idx >= len(arranged): break
+                    
                     s = arranged[idx]
-
                     cursor.execute("""
-                        INSERT INTO seating_arrangement
-                        (admission_id, name, branch, section,
-                         room_number, seat_number, exam_date, time_slot)
+                        INSERT INTO seating_arrangement 
+                        (admission_id, name, branch, section, room_number, seat_number, exam_date, time_slot)
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-                    """, (
-                        s['admission_id'], s['name'], s['branch'], s['section'],
-                        room['room_number'], seat, date, slot
-                    ))
+                    """, (s['admission_id'], s['name'], s['branch'], s['section'], 
+                          room['room_number'], seat, date, slot))
                     idx += 1
+                
+                if idx >= len(arranged): break
 
-                if idx >= len(arranged):
-                    break
-
-            # -------------------------
-            # INVIGILATORS
-            # -------------------------
-            if not invigilators:
-                print("⚠ No invigilators available")
-            else:
+            # Invigilation assignment per room
+            if invigilators:
                 random.shuffle(invigilators)
                 for i, room in enumerate(rooms):
                     inv = invigilators[i % len(invigilators)]
                     cursor.execute("""
-                        INSERT INTO resource_allocation
-                        (registration_id, name, room_number, exam_date, time_slot)
+                        INSERT INTO resource_allocation (registration_id, name, room_number, exam_date, time_slot)
                         VALUES (%s,%s,%s,%s,%s)
-                    """, (
-                        inv['registration_id'], inv['name'], room['room_number'], date, slot
-                    ))
+                    """, (inv['registration_id'], inv['name'], room['room_number'], date, slot))
 
-            conn.commit()
-        print("\n✅ Seating & Invigilation Generated Successfully!")
-
+        conn.commit()
+        return True, "Success"
     except Exception as e:
         conn.rollback()
-        print("❌ Error occurred:", e)
+        return False, str(e)
+    finally:
+        cursor.close()
+        conn.close()
 
 # -----------------------------
-# FLASK ROUTES
+# ROUTES
 # -----------------------------
+
 @app.route('/admin')
 def admin_dashboard():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
     cursor.execute("SELECT COUNT(*) AS total FROM invigilators")
     total_teachers = cursor.fetchone()['total']
-
+    
     cursor.execute("SELECT COUNT(*) AS total FROM rooms")
     total_rooms = cursor.fetchone()['total']
-
+    
     cursor.execute("SELECT COUNT(*) AS total FROM seating_arrangement")
     total_plans = cursor.fetchone()['total']
-
+    
     cursor.execute("SELECT * FROM exam_timetable")
     exams = cursor.fetchall()
-
-    return render_template(
-        'index.html',
-        total_students=240,
-        total_teachers=total_teachers,
-        total_rooms=total_rooms,
-        total_plans=total_plans,
-        exams=exams
-    )
-
-@app.route("/classrooms")
-def classrooms():
-    cursor.execute("SELECT * FROM rooms")
-    rooms = cursor.fetchall()
-    total_capacity = sum(room['capacity'] for room in rooms)
-
-    return render_template(
-        "classrooms.html",
-        rooms=rooms,
-        total_rooms=len(rooms),
-        total_capacity=total_capacity
-    )
-
-@app.route("/seating-plan")
-def seating_plan():
-    cursor.execute("SELECT * FROM seating_arrangement")
-    seating = cursor.fetchall()
     
-    total_rooms = len(set([x['room_number'] for x in seating]))
-
-    cursor.execute("SELECT * FROM invigilators")
-    invigilators = cursor.fetchall()
-
-    return render_template(
-        "seating-plan.html",
-        seating=seating,
-        total_students=len(seating),
-        total_rooms=total_rooms,
-        total_invigilators=len(invigilators)
-    )
-
-@app.route('/api/generate', methods=['POST'])
-def api_generate():
-    generate() 
-    return jsonify({"message": "Seating Generated Successfully!"})
+    cursor.close()
+    conn.close()
+    
+    return render_template('index.html', total_students=240, total_teachers=total_teachers, 
+                           total_rooms=total_rooms, total_plans=total_plans, exams=exams)
 
 @app.route('/api/allocate', methods=['POST'])
 def allocate():
-    # ... logic to assign students to rooms ...
-    return jsonify({"success": True})
-    
-# -----------------------------
-# RUN FLASK SERVER
-# -----------------------------
+    success, message = generate_logic()
+    if success:
+        return jsonify({"success": True, "message": "Allocation completed!"})
+    else:
+        return jsonify({"success": False, "error": message}), 500
+
+@app.route("/seating-plan")
+def seating_plan():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM seating_arrangement")
+    seating = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("seating-plan.html", seating=seating)
+
 if __name__ == '__main__':
-    print("🚀 Backend server is running on http://127.0.0.1:5000")
     app.run(port=5000, debug=True)
