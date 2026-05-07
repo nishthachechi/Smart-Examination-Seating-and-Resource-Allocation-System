@@ -236,6 +236,34 @@ def admin_dashboard():
         total_plans=total_plans,
         exams=exams
     )
+@app.route("/classrooms")
+def classrooms():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="YOUR_PASSWORD",
+        database="examination"
+    )
+
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM rooms")
+    rooms = cursor.fetchall()
+
+    total_rooms = len(rooms)
+
+    total_capacity = sum(room['capacity'] for room in rooms)
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "classrooms.html",
+        rooms=rooms,
+        total_rooms=total_rooms,
+        total_capacity=total_capacity
+    )
 
 # -----------------------------
 # RUN
