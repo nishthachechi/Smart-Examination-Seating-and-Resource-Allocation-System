@@ -1,105 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Classrooms | Exam Room Allocation</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <div class="shell">
-      <aside class="sidebar">
-        <div class="brand-mark">EA</div>
-        <div class="brand">
-          <p>Exam Room Allocation</p>
-          <h2>Admin <span>Dashboard</span></h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Classrooms | Exam Room Allocation</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles.css') }}"
+  />
+
+  <script
+    src="{{ url_for('static', filename='app.js') }}"
+    defer
+  ></script>
+</head>
+
+<body>
+
+  <div class="shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="brand-mark">EA</div>
+
+      <div class="brand">
+        <p>Exam Room Allocation</p>
+        <h2>Admin <span>Dashboard</span></h2>
+      </div>
+
+      <p class="sidebar-copy">
+        Classroom planning helps the admin verify room capacity
+        and availability before generating the final seating plan.
+      </p>
+
+      <nav class="nav-links">
+
+        <a href="/">
+          Dashboard
+          <small>Overview and quick access</small>
+        </a>
+
+        <a href="/students">
+          Student List
+          <small>Registered students and room details</small>
+        </a>
+
+        <a href="/teachers">
+          Teachers List
+          <small>Faculty and invigilation assignment</small>
+        </a>
+
+        <a class="active" href="/classrooms">
+          Classrooms
+          <small>Room capacity and availability</small>
+        </a>
+
+        <a href="/seating-plan">
+          Seating Plan
+          <small>Final room-wise arrangement</small>
+        </a>
+
+        <a href="/exam-timetable">
+          Exam Timetable
+          <small>Exam schedule and subjects</small>
+        </a>
+
+        <a class="logout-link" href="/logout">
+          Logout
+          <small>Return to login page</small>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-note">
+        <p>Module</p>
+        <strong>Classroom Capacity Monitor</strong>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- HEADER -->
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">Room Details</p>
+
+          <h1>Classroom List</h1>
+
+          <p>
+            View all classrooms with room number and seating
+            capacity for exam hall allocation.
+          </p>
+
         </div>
-        <p class="sidebar-copy">
-          Classroom planning helps the admin verify capacity, floor, and room
-          status before generating the final seating plan.
-        </p>
 
-        <nav class="nav-links">
-          <a href="index.html">
-            Dashboard
-            <small>Overview and quick access</small>
-          </a>
-          <a href="students.html">
-            Student List
-            <small>Registered students and room details</small>
-          </a>
-          <a href="teacher-list.html">
-            Teachers List
-            <small>Faculty and invigilation assignment</small>
-          </a>
-          <a class="active" href="classrooms.html">
-            Classrooms
-            <small>Rooms with capacity and status</small>
-          </a>
-          <a href="seating-plan.html">
-            Generate Seating Plan
-            <small>Final room-wise exam arrangement</small>
-          </a>
-          <a class="logout-link" href="login.html" data-logout="true">
-            Logout
-            <small>Return to main login page</small>
-          </a>
-        </nav>
+        <a class="primary-button" href="/">
+          Back to Dashboard
+        </a>
 
-        <div class="sidebar-note">
-          <p>Module</p>
-          <strong>Classroom Capacity Monitor</strong>
-        </div>
-      </aside>
+      </header>
 
-      <main class="main-content">
-        <header class="page-header">
+      <!-- CLASSROOM TABLE -->
+      <section class="panel">
+
+        <div class="panel-header">
+
           <div>
-            <p class="eyebrow">Room Details</p>
-            <h1>Classroom List</h1>
+
+            <h2>Available Classrooms</h2>
+
             <p>
-              This page shows all classrooms with room number, block, floor, and
-              seating capacity so the admin can plan exam allocation accurately.
+              Rooms fetched directly from the database.
             </p>
-          </div>
-          <a class="primary-button" href="index.html">Back to Dashboard</a>
-        </header>
 
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Available Classrooms</h2>
-              <p>Capacity and availability status for each exam hall.</p>
-            </div>
-            <span class="panel-pill" id="admin-classroom-count">0 Active Rooms</span>
           </div>
 
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Room No</th>
-                  <th>Block</th>
-                  <th>Floor</th>
-                  <th>Capacity</th>
-                  <th>Projector</th>
-                  <th>Exam Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="admin-classrooms-body"></tbody>
-            </table>
-          </div>
-        </section>
+          <span class="panel-pill">
+            {{ total_rooms }} Active Rooms
+          </span>
 
-        <p class="footer-note">
-          You can add more room facilities such as CCTV, ventilation, or lab
-          type if required.
-        </p>
-      </main>
-    </div>
-  </body>
-</html>
- 
- 
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Room Number</th>
+                <th>Capacity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {% for room in rooms %}
+
+              <tr>
+
+                <td>{{ room.room_number }}</td>
+
+                <td>{{ room.capacity }}</td>
+
+                <td>
+                  {% if room.capacity >= 40 %}
+                    Available
+                  {% else %}
+                    Limited
+                  {% endif %}
+                </td>
+
+              </tr>
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <!-- ROOM SUMMARY -->
+      <section class="metrics">
+
+        <article class="metric-card teal">
+
+          <p>Total Rooms</p>
+
+          <h2>{{ total_rooms }}</h2>
+
+          <strong>Exam halls available</strong>
+
+        </article>
+
+        <article class="metric-card gold">
+
+          <p>Total Capacity</p>
+
+          <h2>{{ total_capacity }}</h2>
+
+          <strong>Total student seating</strong>
+
+        </article>
+
+      </section>
+
+      <p class="footer-note">
+        Exam Room Allocation System - Classroom Module
+      </p>
+
+    </main>
+
+  </div>
+
+</body>
+</html> 
