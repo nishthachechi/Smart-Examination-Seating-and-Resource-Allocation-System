@@ -1,130 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seating Plan | Exam Room Allocation</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <div class="shell">
-      <aside class="sidebar">
-        <div class="brand-mark">EA</div>
-        <div class="brand">
-          <p>Exam Room Allocation</p>
-          <h2>Admin <span>Dashboard</span></h2>
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Seating Plan | Exam Room Allocation</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles.css') }}"
+  />
+
+  <script
+    src="{{ url_for('static', filename='app.js') }}"
+    defer
+  ></script>
+
+</head>
+
+<body>
+
+  <div class="shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="brand-mark">EA</div>
+
+      <div class="brand">
+        <p>Exam Room Allocation</p>
+        <h2>Admin <span>Dashboard</span></h2>
+      </div>
+
+      <p class="sidebar-copy">
+        Review the room-wise seating plan generated
+        for examinations.
+      </p>
+
+      <nav class="nav-links">
+
+        <a href="/">
+          Dashboard
+          <small>Overview and quick access</small>
+        </a>
+
+        <a href="/students">
+          Student List
+          <small>Registered students and room details</small>
+        </a>
+
+        <a href="/teachers">
+          Teachers List
+          <small>Faculty and invigilation assignment</small>
+        </a>
+
+        <a href="/classrooms">
+          Classrooms
+          <small>Room capacity and availability</small>
+        </a>
+
+        <a class="active" href="/seating-plan">
+          Seating Plan
+          <small>Final room-wise arrangement</small>
+        </a>
+
+        <a href="/exam-timetable">
+          Exam Timetable
+          <small>Exam schedule and subjects</small>
+        </a>
+
+        <a class="logout-link" href="/logout">
+          Logout
+          <small>Return to login page</small>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-note">
+        <p>Module</p>
+        <strong>Final Seating Plan</strong>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- HEADER -->
+      <header class="page-header">
+
+        <div>
+
+          <p class="eyebrow">Allocation Output</p>
+
+          <h1>Generated Seating Plan</h1>
+
+          <p>
+            View shuffled room-wise seating arrangement
+            generated from the database.
+          </p>
+
         </div>
-        <p class="sidebar-copy">
-          Review the room-wise seating plan generated for each exam date and
-          session.
-        </p>
 
-        <nav class="nav-links">
-          <a href="index.html">
-            Dashboard
-            <small>Overview and quick access</small>
-          </a>
-          <a href="students.html">
-            Student List
-            <small>Registered students and room details</small>
-          </a>
-          <a href="teacher-list.html">
-            Teachers List
-            <small>Faculty and invigilation assignment</small>
-          </a>
-          <a href="classrooms.html">
-            Classrooms
-            <small>Rooms with capacity and status</small>
-          </a>
-          <a class="active" href="seating-plan.html">
-            Generate Seating Plan
-            <small>Final room-wise exam arrangement</small>
-          </a>
-          <a class="logout-link" href="login.html" data-logout="true">
-            Logout
-            <small>Return to main login page</small>
-          </a>
-        </nav>
+        <a class="primary-button" href="/">
+          Back to Dashboard
+        </a>
 
-        <div class="sidebar-note">
-          <p>Module</p>
-          <strong>Final Seating Plan</strong>
-        </div>
-      </aside>
+      </header>
 
-      <main class="main-content">
-        <header class="page-header">
+      <!-- METRICS -->
+      <section class="metrics">
+
+        <article class="metric-card teal">
+
+          <p>Rooms Used</p>
+
+          <h2>{{ total_rooms }}</h2>
+
+          <strong>Exam halls allocated</strong>
+
+        </article>
+
+        <article class="metric-card gold">
+
+          <p>Students Seated</p>
+
+          <h2>{{ total_students }}</h2>
+
+          <strong>Total allocated students</strong>
+
+        </article>
+
+        <article class="metric-card rose">
+
+          <p>Invigilators</p>
+
+          <h2>{{ total_invigilators }}</h2>
+
+          <strong>Faculty assigned</strong>
+
+        </article>
+
+        <article class="metric-card dark">
+
+          <p>Plan Status</p>
+
+          <h2>Ready</h2>
+
+          <strong>Approved by admin</strong>
+
+        </article>
+
+      </section>
+
+      <!-- SEATING TABLE -->
+      <section class="panel">
+
+        <div class="panel-header">
+
           <div>
-            <p class="eyebrow">Allocation Output</p>
-            <h1>Generated Seating Plan</h1>
+
+            <h2>Room-wise Seating Plan</h2>
+
             <p>
-              This page displays the final seating arrangement in table format,
-              including exam date, room, capacity used, and assigned
-              invigilator.
+              Seating arrangement fetched directly
+              from the database.
             </p>
-          </div>
-          <a class="primary-button" href="index.html">Back to Dashboard</a>
-        </header>
 
-        <section class="metrics">
-          <article class="metric-card teal">
-            <p>Exam Rooms Used</p>
-            <h2 id="plan-room-count">0</h2>
-            <strong>Across two sessions</strong>
-          </article>
-          <article class="metric-card gold">
-            <p>Students Seated</p>
-            <h2 id="plan-student-count">0</h2>
-            <strong>For the shown sample plan</strong>
-          </article>
-          <article class="metric-card rose">
-            <p>Invigilators Assigned</p>
-            <h2 id="plan-invigilator-count">0</h2>
-            <strong>One faculty per room</strong>
-          </article>
-          <article class="metric-card dark">
-            <p>Plan Status</p>
-            <h2 id="plan-status-label">Ready</h2>
-            <strong>Approved by admin</strong>
-          </article>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Room-wise Seating Plan</h2>
-              <p>Example table for the generated hall allocation output.</p>
-            </div>
-            <span class="panel-pill" id="plan-last-generated">Last Generated: 22 Apr 2026</span>
           </div>
 
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Plan ID</th>
-                  <th>Exam Date</th>
-                  <th>Session</th>
-                  <th>Course Code</th>
-                  <th>Room No</th>
-                  <th>Students Allotted</th>
-                  <th>Capacity Used</th>
-                  <th>Invigilator</th>
-                </tr>
-              </thead>
-              <tbody id="admin-seating-body"></tbody>
-            </table>
-          </div>
-        </section>
+          <span class="panel-pill">
+            Generated Successfully
+          </span>
 
-        <p class="footer-note">
-          This page can later be connected to your backend logic for actual seat
-          generation.
-        </p>
-      </main>
-    </div>
-  </body>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Admission ID</th>
+
+                <th>Name</th>
+
+                <th>Branch</th>
+
+                <th>Section</th>
+
+                <th>Room Number</th>
+
+                <th>Seat Number</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {% for student in seating %}
+
+              <tr>
+
+                <td>{{ student.admission_id }}</td>
+
+                <td>{{ student.name }}</td>
+
+                <td>{{ student.branch }}</td>
+
+                <td>{{ student.section }}</td>
+
+                <td>{{ student.room_number }}</td>
+
+                <td>{{ student.seat_number }}</td>
+
+              </tr>
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <p class="footer-note">
+        Exam Room Allocation System - Seating Plan Module
+      </p>
+
+    </main>
+
+  </div>
+
+</body>
 </html>
-
-
