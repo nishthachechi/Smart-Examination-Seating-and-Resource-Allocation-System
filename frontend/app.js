@@ -975,6 +975,30 @@
         .join("")
     );
   }
+  // -----------------------------------------
+  // CONNECTION TO PYTHON BACKEND
+  // -----------------------------------------
+  window.triggerAllocation = function() {
+    console.log("Asking Python to generate seating plan...");
+    
+    fetch('http://127.0.0.1:5000/api/generate', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message); // Pops up "Seating Generated Successfully!"
+        console.log("Success:", data);
+        // Here is where you will eventually add code to refresh your HTML tables
+    })
+    .catch(error => {
+        console.error("Error connecting to Python backend:", error);
+        alert("Failed to connect to the backend server. Is app.py running?");
+    });
+  }
+
+  function initPage() {
+    bindLogoutLinks();
+    // ... rest of the code stays the same
 
   function initPage() {
     bindLogoutLinks();
