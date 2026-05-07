@@ -3,87 +3,148 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Teacher Dashboard | Exam Room Allocation</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
+
+    <!-- FLASK CSS CONNECTION -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+
+    <!-- FLASK JS CONNECTION -->
+    <script
+      src="{{ url_for('static', filename='app.js') }}"
+      defer
+    ></script>
   </head>
+
   <body>
     <div class="shell">
+
+      <!-- SIDEBAR -->
       <aside class="sidebar">
+
         <div class="brand-mark">EA</div>
+
         <div class="brand">
           <p>Exam Room Allocation</p>
           <h2>Teacher <span>Dashboard</span></h2>
         </div>
+
         <p class="sidebar-copy">
-          Faculty view of the exam allocation system with personal details and
-          allotted invigilation rooms.
+          Faculty view of the exam allocation system with personal details
+          and allotted invigilation rooms.
         </p>
 
         <nav class="nav-links">
-          <a href="login.html" data-logout="true">
+
+          <a href="/login">
             Login Portal
             <small>Choose student, teacher, or admin login</small>
           </a>
-          <a href="student-dashboard.html">
+
+          <a href="/student-dashboard">
             Student Dashboard
             <small>Student details and exam schedule</small>
           </a>
-          <a class="active" href="teachers.html">
+
+          <a class="active" href="/teachers">
             Teacher Dashboard
             <small>Faculty details and room assignment</small>
           </a>
-          <a href="index.html">
+
+          <a href="/index">
             Admin Dashboard
             <small>Admin tables and seating plan</small>
           </a>
+
         </nav>
 
         <div class="sidebar-note">
           <p>Teacher Status</p>
           <strong>Invigilation Assigned</strong>
         </div>
+
       </aside>
 
+      <!-- MAIN CONTENT -->
       <main class="main-content">
+
         <header class="page-header">
+
           <div>
             <p class="eyebrow">Teacher View</p>
+
             <h1>Teacher Dashboard</h1>
+
             <p>
-              This page includes the teacher details and the room allocation
+              This page includes the teacher details and room allocation
               table with exam date and room capacity.
             </p>
           </div>
-          <a class="primary-button" href="login.html" data-logout="true">Back to Login</a>
+
+          <a class="primary-button" href="/login">
+            Back to Login
+          </a>
+
         </header>
 
+        <!-- SUMMARY -->
         <section class="summary-grid">
+
           <article class="summary-card teal">
             <p>Teacher Name</p>
-            <h2 id="teacher-name">Dr. Meera Joshi</h2>
+
+            <!-- DATABASE VALUE -->
+            <h2 id="teacher-name">
+              {{ teacher_name }}
+            </h2>
           </article>
+
           <article class="summary-card gold">
-            <p>USN / Staff ID</p>
-            <h2 id="teacher-id">TCH2200101</h2>
+            <p>Staff ID</p>
+
+            <!-- DATABASE VALUE -->
+            <h2 id="teacher-id">
+              {{ teacher_id }}
+            </h2>
           </article>
+
           <article class="summary-card dark">
             <p>Department</p>
-            <h2 id="teacher-department">Computer Science</h2>
+
+            <!-- DATABASE VALUE -->
+            <h2 id="teacher-department">
+              {{ teacher_department }}
+            </h2>
           </article>
+
         </section>
 
+        <!-- DUTY TABLE -->
         <section class="panel">
+
           <div class="panel-header">
+
             <div>
               <h2>Room Allotment Table</h2>
-              <p>Teacher invigilation rooms with date and room capacity.</p>
+
+              <p>
+                Teacher invigilation rooms with date and room capacity.
+              </p>
             </div>
-            <span class="panel-pill" id="teacher-duty-count">0 Assigned Duties</span>
+
+            <span class="panel-pill">
+              Assigned Duties
+            </span>
+
           </div>
 
           <div class="table-wrap">
+
             <table>
+
               <thead>
                 <tr>
                   <th>Course Code</th>
@@ -93,16 +154,35 @@
                   <th>Session</th>
                 </tr>
               </thead>
-              <tbody id="teacher-duty-body"></tbody>
+
+              <tbody>
+
+                {% for duty in teacher_duties %}
+
+                <tr>
+                  <td>{{ duty.course_code }}</td>
+                  <td>{{ duty.room_no }}</td>
+                  <td>{{ duty.exam_date }}</td>
+                  <td>{{ duty.capacity }}</td>
+                  <td>{{ duty.session }}</td>
+                </tr>
+
+                {% endfor %}
+
+              </tbody>
+
             </table>
+
           </div>
+
         </section>
 
         <p class="footer-note">
-          Update the teacher ID label if your project uses a separate staff code
-          instead of USN.
+          Teacher invigilation details connected with database.
         </p>
+
       </main>
+
     </div>
   </body>
 </html>
