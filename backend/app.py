@@ -207,6 +207,16 @@ def generate():
 # -----------------------------
 # RUN
 # -----------------------------
-generate()
+# -----------------------------
+# RUN FLASK SERVER
+# -----------------------------
+@app.route('/api/generate', methods=['POST'])
+def api_generate():
+    generate() # This runs your existing algorithm
+    return jsonify({"message": "Seating Generated Successfully!"})
+
+if __name__ == '__main__':
+    print("🚀 Backend server is running on http://127.0.0.1:5000")
+    app.run(port=5000, debug=True)
 
 
