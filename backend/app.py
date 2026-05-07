@@ -1,3 +1,12 @@
+from flask import Flask, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+import mysql.connector
+import random
+# ... rest of the code stays the same
 import mysql.connector
 import random
 from collections import defaultdict
