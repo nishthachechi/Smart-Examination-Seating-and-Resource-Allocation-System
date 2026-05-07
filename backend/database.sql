@@ -476,6 +476,27 @@ INSERT INTO invigilators VALUES
 
 SELECT * FROM invigilators;
 
+ALTER TABLE cse_students_a ADD password VARCHAR(50);
+ALTER TABLE me_students_a ADD password VARCHAR(50);
+ALTER TABLE ece_students_a ADD password VARCHAR(50);
+ALTER TABLE cse_ds_students_a ADD password VARCHAR(50);
+ALTER TABLE cse_cy_students_a ADD password VARCHAR(50);
+ALTER TABLE eee_students_a ADD password VARCHAR(50);
+ALTER TABLE cse_aiml_students_a ADD password VARCHAR(50);
+
+ALTER TABLE invigilators ADD password VARCHAR(50);
+
+UPDATE cse_students_a SET password='student123';
+UPDATE me_students_a SET password='student123';
+UPDATE ece_students_a SET password='student123';
+UPDATE cse_ds_students_a SET password='student123';
+UPDATE cse_cy_students_a SET password='student123';
+UPDATE eee_students_a SET password='student123';
+UPDATE cse_aiml_students_a SET password='student123';
+
+UPDATE invigilators SET password='teacher123';
+
+
 -- -----------------------------
 -- SEATING TABLE
 -- -----------------------------
