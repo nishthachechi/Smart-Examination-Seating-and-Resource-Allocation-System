@@ -236,6 +236,11 @@ def api_generate():
     generate() 
     return jsonify({"message": "Seating Generated Successfully!"})
 
+@app.route('/api/allocate', methods=['POST'])
+def allocate():
+    # ... logic to assign students to rooms ...
+    return jsonify({"success": True})
+    
 # -----------------------------
 # RUN FLASK SERVER
 # -----------------------------
