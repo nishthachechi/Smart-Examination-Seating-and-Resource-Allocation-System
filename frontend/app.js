@@ -1,26 +1,4 @@
-(function () {
-  const STORAGE_KEYS = {
-    session: "examRoomAllocationSession",
-    flash: "examRoomAllocationFlash",
-  };
-
-  const adminStudentRows = [
-    {
-      usn: "1RV22CS001",
-      name: "Aarav Sharma",
-      department: "Computer Science",
-      semester: 6,
-      courseCode: "22CS61",
-      examDate: "24 Apr 2026",
-      room: "A-201",
-    },
-    {
-      usn: "1RV22CS014",
-      name: "Diya Nair",
-      department: "Computer Science",
-      semester: 6,
-      courseCode: "22CS61",
-      examDate: "24 Apr 2026",
+(26",
       room: "A-202",
     },
     {
