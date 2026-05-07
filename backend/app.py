@@ -11,7 +11,7 @@ CORS(app)
 # DB CONNECTION (UPDATE PASSWORD HERE!)
 # -----------------------------
 # CHANGE "root123" TO YOUR ACTUAL MYSQL PASSWORD
-DB_PASSWORD = "root123" 
+DB_PASSWORD = "root@123" 
 
 try:
     conn = mysql.connector.connect(
