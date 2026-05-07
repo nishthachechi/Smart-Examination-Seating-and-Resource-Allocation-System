@@ -204,6 +204,39 @@ def generate():
         cursor.close()
         conn.close()
 
+@app.route('/admin')
+def admin_dashboard():
+
+    cursor = conn.cursor(dictionary=True)
+
+    # TOTAL STUDENTS
+    total_students = 240
+
+    # TOTAL TEACHERS
+    cursor.execute("SELECT COUNT(*) AS total FROM invigilators")
+    total_teachers = cursor.fetchone()['total']
+
+    # TOTAL ROOMS
+    cursor.execute("SELECT COUNT(*) AS total FROM rooms")
+    total_rooms = cursor.fetchone()['total']
+
+    # TOTAL SEATING PLANS
+    cursor.execute("SELECT COUNT(*) AS total FROM seating_arrangement")
+    total_plans = cursor.fetchone()['total']
+
+    # EXAM TABLE
+    cursor.execute("SELECT * FROM exams")
+    exams = cursor.fetchall()
+
+    return render_template(
+        'index.html',
+        total_students=total_students,
+        total_teachers=total_teachers,
+        total_rooms=total_rooms,
+        total_plans=total_plans,
+        exams=exams
+    )
+
 # -----------------------------
 # RUN
 # -----------------------------
