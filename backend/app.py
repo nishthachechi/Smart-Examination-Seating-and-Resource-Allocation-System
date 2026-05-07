@@ -264,6 +264,40 @@ def classrooms():
         total_rooms=total_rooms,
         total_capacity=total_capacity
     )
+@app.route("/seating-plan")
+def seating_plan():
+
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="YOUR_PASSWORD",
+        database="examination"
+    )
+
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM seating_arrangement")
+    seating = cursor.fetchall()
+
+    total_students = len(seating)
+
+    total_rooms = len(set([x['room_number'] for x in seating]))
+
+    cursor.execute("SELECT * FROM invigilators")
+    invigilators = cursor.fetchall()
+
+    total_invigilators = len(invigilators)
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "seating-plan.html",
+        seating=seating,
+        total_students=total_students,
+        total_rooms=total_rooms,
+        total_invigilators=total_invigilators
+    )
 
 # -----------------------------
 # RUN
