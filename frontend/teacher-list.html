@@ -1,105 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teachers List | Exam Room Allocation</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <div class="shell">
-      <aside class="sidebar">
-        <div class="brand-mark">EA</div>
-        <div class="brand">
-          <p>Exam Room Allocation</p>
-          <h2>Admin <span>Dashboard</span></h2>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Teachers List | Exam Room Allocation</title>
+
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='styles.css') }}"
+  />
+
+  <script
+    src="{{ url_for('static', filename='app.js') }}"
+    defer>
+  </script>
+</head>
+
+<body>
+
+  <div class="shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <div class="brand-mark">EA</div>
+
+      <div class="brand">
+        <p>Exam Room Allocation</p>
+        <h2>Admin <span>Dashboard</span></h2>
+      </div>
+
+      <p class="sidebar-copy">
+        Use the teacher module to track invigilators,
+        departments, rooms, and exam duty timing.
+      </p>
+
+      <nav class="nav-links">
+
+        <a href="{{ url_for('index') }}">
+          Dashboard
+          <small>Overview and quick access</small>
+        </a>
+
+        <a href="{{ url_for('students') }}">
+          Student List
+          <small>Registered students and room details</small>
+        </a>
+
+        <a class="active" href="{{ url_for('teacher_list') }}">
+          Teachers List
+          <small>Faculty and invigilation assignment</small>
+        </a>
+
+        <a href="{{ url_for('classrooms') }}">
+          Classrooms
+          <small>Rooms with capacity and status</small>
+        </a>
+
+        <a href="{{ url_for('seating_plan') }}">
+          Generate Seating Plan
+          <small>Final room-wise exam arrangement</small>
+        </a>
+
+        <a
+          class="logout-link"
+          href="{{ url_for('login') }}"
+        >
+          Logout
+          <small>Return to main login page</small>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-note">
+        <p>Module</p>
+        <strong>Invigilation Management</strong>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+      <header class="page-header">
+
+        <div>
+          <p class="eyebrow">Faculty Records</p>
+
+          <h1>Teachers List</h1>
+
+          <p>
+            This page contains the list of teachers
+            with their department, assigned exam room,
+            and invigilation schedule.
+          </p>
         </div>
-        <p class="sidebar-copy">
-          Use the teacher module to track invigilators, departments, rooms, and
-          exam duty timing.
-        </p>
 
-        <nav class="nav-links">
-          <a href="index.html">
-            Dashboard
-            <small>Overview and quick access</small>
-          </a>
-          <a href="students.html">
-            Student List
-            <small>Registered students and room details</small>
-          </a>
-          <a class="active" href="teacher-list.html">
-            Teachers List
-            <small>Faculty and invigilation assignment</small>
-          </a>
-          <a href="classrooms.html">
-            Classrooms
-            <small>Rooms with capacity and status</small>
-          </a>
-          <a href="seating-plan.html">
-            Generate Seating Plan
-            <small>Final room-wise exam arrangement</small>
-          </a>
-          <a class="logout-link" href="login.html" data-logout="true">
-            Logout
-            <small>Return to main login page</small>
-          </a>
-        </nav>
+        <a
+          class="primary-button"
+          href="{{ url_for('index') }}"
+        >
+          Back to Dashboard
+        </a>
 
-        <div class="sidebar-note">
-          <p>Module</p>
-          <strong>Invigilation Management</strong>
-        </div>
-      </aside>
+      </header>
 
-      <main class="main-content">
-        <header class="page-header">
+      <!-- TABLE SECTION -->
+
+      <section class="panel">
+
+        <div class="panel-header">
+
           <div>
-            <p class="eyebrow">Faculty Records</p>
-            <h1>Teachers List</h1>
-            <p>
-              This page contains the list of teachers with their department,
-              assigned exam room, and invigilation schedule.
-            </p>
-          </div>
-          <a class="primary-button" href="index.html">Back to Dashboard</a>
-        </header>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <h2>Invigilator Allocation Table</h2>
-              <p>Faculty members assigned for exam duty.</p>
-            </div>
-            <span class="panel-pill" id="admin-teacher-count">0 Faculty Assigned</span>
+            <h2>Invigilator Allocation Table</h2>
+            <p>Faculty members assigned for exam duty.</p>
           </div>
 
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Teacher ID</th>
-                  <th>Teacher Name</th>
-                  <th>Department</th>
-                  <th>Phone</th>
-                  <th>Exam Date</th>
-                  <th>Assigned Room</th>
-                  <th>Session</th>
-                </tr>
-              </thead>
-              <tbody id="admin-teachers-body"></tbody>
-            </table>
-          </div>
-        </section>
+          <span
+            class="panel-pill"
+            id="admin-teacher-count"
+          >
+            {{ teachers|length }} Faculty Assigned
+          </span>
 
-        <p class="footer-note">
-          You can add email, designation, or block number columns if your
-          project needs more details.
-        </p>
-      </main>
-    </div>
-  </body>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Teacher ID</th>
+                <th>Teacher Name</th>
+                <th>Department</th>
+                <th>Phone</th>
+                <th>Exam Date</th>
+                <th>Assigned Room</th>
+                <th>Session</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {% for teacher in teachers %}
+
+              <tr>
+                <td>{{ teacher.teacher_id }}</td>
+                <td>{{ teacher.teacher_name }}</td>
+                <td>{{ teacher.department }}</td>
+                <td>{{ teacher.phone }}</td>
+                <td>{{ teacher.exam_date }}</td>
+                <td>{{ teacher.assigned_room }}</td>
+                <td>{{ teacher.session }}</td>
+              </tr>
+
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <p class="footer-note">
+        You can add email, designation,
+        or block number columns if needed.
+      </p>
+
+    </main>
+
+  </div>
+
+</body>
+
 </html>
-
-
